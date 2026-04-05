@@ -1,0 +1,2125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liquid Optics — Pebble & Void</title>
+    
+    <!-- Very Rounded Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* ==========================================================================
+           PEBBLE & VOID DESIGN SYSTEM (Dark & Rounded)
+           ========================================================================== */
+        :root {
+            --bg-void: #09090b; /* Deep, almost black */
+            --bg-card: #141419; /* Slightly elevated card color */
+            --text-main: #fcfcfd;
+            --text-muted: #8a8a98;
+            --accent-border: rgba(255, 255, 255, 0.06);
+            --accent-glow: rgba(255, 255, 255, 0.03);
+            
+            --font-rounded: 'Nunito', sans-serif;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-void);
+            color: var(--text-main);
+            font-family: var(--font-rounded);
+            line-height: 1.5;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            /* Soft radial background glow */
+            background-image: radial-gradient(circle at 50% 0%, #1a1a24 0%, var(--bg-void) 70%);
+        }
+
+        /* ==========================================================================
+           HEADER & LAYOUT
+           ========================================================================== */
+        .exhibition-header {
+            padding: 15vh 4vw 8vh 4vw;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 1.5rem;
+        }
+
+        .header-meta {
+            display: inline-flex;
+            gap: 1rem;
+            background: rgba(255,255,255,0.05);
+            padding: 0.5rem 1.5rem;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            letter-spacing: 0.1em;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            box-shadow: inset 0 1px 2px rgba(255,255,255,0.1), 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .main-title {
+            font-size: clamp(3rem, 12vw, 8rem);
+            font-weight: 900;
+            line-height: 1;
+            margin: 0;
+            letter-spacing: -0.04em;
+            background: linear-gradient(180deg, #ffffff 0%, #66667a 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
+        }
+
+        .header-desc {
+            font-size: clamp(1.1rem, 2vw, 1.5rem);
+            max-width: 600px;
+            margin: 0;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        /* Fluid layout with heavy spacing and rounded cards */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 2rem;
+            padding: 2rem 4vw 8rem 4vw;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .exhibit {
+            background-color: var(--bg-card);
+            border-radius: 48px; /* Extremely rounded */
+            display: flex;
+            flex-direction: column;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4), inset 0 1px 1px rgba(255,255,255,0.08);
+            border: 1px solid var(--accent-border);
+            transition: transform 0.3s ease;
+        }
+
+        /* Grid Spans */
+        .span-12 { grid-column: span 12; }
+        .span-8  { grid-column: span 8; }
+        .span-6  { grid-column: span 6; }
+        .span-4  { grid-column: span 4; }
+
+        @media (max-width: 1024px) {
+            .span-4, .span-6 { grid-column: span 12; }
+            .span-8 { grid-column: span 12; }
+            .gallery-grid { gap: 1.5rem; padding: 1rem 2vw 4rem; }
+            .exhibit { border-radius: 36px; padding: 1.5rem; }
+        }
+
+        /* ==========================================================================
+           EXHIBIT PLACARDS (INFO)
+           ========================================================================== */
+        .exhibit-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .exhibit-number {
+            background: rgba(255,255,255,0.05);
+            color: var(--text-muted);
+            font-size: 1rem;
+            font-weight: 800;
+            padding: 0.4rem 1.2rem;
+            border-radius: 100px;
+            margin-bottom: 0.5rem;
+            box-shadow: inset 0 1px 1px rgba(255,255,255,0.05);
+        }
+
+        .exhibit-title {
+            font-weight: 900;
+            font-size: 1.8rem;
+            letter-spacing: -0.02em;
+            margin: 0;
+            color: var(--text-main);
+        }
+
+        .exhibit-desc {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin: 0;
+            max-width: 400px;
+            line-height: 1.4;
+        }
+
+        /* ==========================================================================
+           CANVAS WRAPPERS
+           ========================================================================== */
+        .canvas-wrapper {
+            position: relative;
+            width: 100%;
+            height: 400px; 
+            border-radius: 32px; /* Very rounded inner canvases */
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05), inset 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        /* Glowing Orb Backgrounds (Dark, Soft, Highly Refractive) */
+        #lensDemoArea   { height: 500px; background: radial-gradient(circle at 50% 50%, #1e1e28 0%, #0a0a0e 100%); }
+        #sliderDemoArea { background: radial-gradient(circle at 50% 50%, #0d2746 0%, #050b14 100%); }
+        #switchDemoArea { background: radial-gradient(circle at 50% 50%, #291238 0%, #0d0514 100%); }
+        #dockDemoArea   { background: radial-gradient(circle at 50% 100%, #302213 0%, #0d0a05 100%); }
+        #cursorDemoArea { height: 500px; background: #050508; }
+        #buttonDemoArea { background: radial-gradient(circle at 50% 50%, #0c333a 0%, #030d0e 100%); }
+        #tabsDemoArea   { background: radial-gradient(circle at 50% 100%, #3a1a2b 0%, #0e0509 100%); }
+        #dialDemoArea   { height: 450px; background: radial-gradient(circle at 50% 50%, #1a1a24 0%, #07070a 100%); }
+        #inputDemoArea  { background: radial-gradient(circle at 50% 50%, #38151b 0%, #110507 100%); }
+        #volDemoArea    { height: 500px; background: radial-gradient(circle at 50% 50%, #302611 0%, #0e0b04 100%); }
+        #fabDemoArea    { height: 450px; background: radial-gradient(circle at 100% 100%, #112847 0%, #050b14 100%); display: flex; align-items: flex-end; justify-content: flex-end; padding: 40px; }
+        #stepperDemoArea{ background: radial-gradient(circle at 50% 50%, #0f3642 0%, #040e12 100%); }
+
+        /* ==========================================================================
+           COMPONENT INTERNAL STYLING
+           (Adapting elements to be extremely soft and rounded)
+           ========================================================================== */
+           
+        /* Lens */
+        .lens-content, .lens-clone-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; padding: 2rem; pointer-events: none; align-items: center;}
+        @media (max-width: 768px) { .lens-content, .lens-clone-inner { grid-template-columns: 1fr; } } 
+        .lens-text { display: flex; flex-direction: column; justify-content: center; } 
+        .lens-label-text { font-weight: 800; color: #fff; letter-spacing: 0.1em; opacity: 0.5; font-size: 0.8rem; text-transform: uppercase;}
+        .lens-label-line { display: none; }
+        .lens-heading { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 900; line-height: 1; margin: 0 0 1rem 0; color: #fff; letter-spacing: -0.03em;} 
+        .lens-text p { font-size: 1.1rem; color: #aaa; margin:0; }
+        .lens-image-container { position: relative; border-radius: 30px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5); } 
+        .lens-image-container img { width: 100%; height: 100%; object-fit: cover; }
+        
+        /* Cursor Typography */
+        #cursorRealWorld h3 { font-size: 4rem; color: #fff; margin: 0; font-weight: 900; letter-spacing: -0.03em; z-index: 5; text-shadow: 0 4px 20px rgba(0,0,0,0.8); }
+        .cursor-btn { font-family: inherit; font-weight: 800; border-radius: 100px; background: rgba(255,255,255,0.1); color: #fff; padding: 1rem 2.5rem; border: none; backdrop-filter: blur(10px); box-shadow: 0 10px 20px rgba(0,0,0,0.3), inset 0 1px 1px rgba(255,255,255,0.2); transition: all 0.2s; z-index: 5; cursor: none; margin-top: 2rem;}
+        .cursor-btn:hover { background: rgba(255,255,255,0.2); transform: scale(1.05); }
+        .cursor-bg-img-1 { position: absolute; top: 10%; left: 10%; width: 200px; height: 200px; border-radius: 100px; object-fit: cover; opacity: 0.5; box-shadow: 0 20px 40px rgba(0,0,0,0.6); }
+        .cursor-bg-img-2 { position: absolute; bottom: 10%; right: 10%; width: 180px; height: 180px; border-radius: 90px; object-fit: cover; opacity: 0.5; box-shadow: 0 20px 40px rgba(0,0,0,0.6); }
+
+        /* General UI resets for dark/soft aesthetic */
+        .liquid-button-text { font-weight: 800; letter-spacing: 0.05em; font-size: 1rem; color: #fff; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+        .tabs-item { font-weight: 700; letter-spacing: 0.05em; font-size: 0.95rem; }
+        .liquid-input-field { font-family: inherit; font-weight: 700; }
+        .stepper-val { font-family: inherit; font-weight: 800; }
+        .dock-item span { font-family: inherit; font-weight: 800; letter-spacing: 0.05em; text-transform: capitalize; }
+        
+        /* Ambient Background Orbs inside Canvases (To give glass something to refract) */
+        .ambient-orb { position: absolute; border-radius: 50%; filter: blur(60px); opacity: 0.4; pointer-events: none; }
+        #dockRealWorld .dock-bg-shape-1 { background: #6366f1; width: 400px; height: 400px; bottom: -100px; left: 0; }
+        #dockRealWorld .dock-bg-shape-2 { background: #ec4899; width: 300px; height: 300px; top: -50px; right: 0; }
+        #buttonRealWorld .button-bg-shape-1 { background: #14b8a6; width: 300px; height: 300px; top: -50px; left: 0; }
+        #buttonRealWorld .button-bg-shape-2 { background: #3b82f6; width: 300px; height: 300px; bottom: -50px; right: 0; }
+        #inputRealWorld .orb-1 { background: #f43f5e; width: 250px; height: 250px; top: 20%; left: 10%; }
+        #inputRealWorld .orb-2 { background: #8b5cf6; width: 200px; height: 200px; bottom: 10%; right: 10%; }
+        #volRealWorld .orb-1 { background: #f59e0b; width: 200px; height: 400px; right: 20%; top: 10%; }
+        #stepperRealWorld .orb-1 { background: #06b6d4; width: 250px; height: 250px; top: 10%; right: 10%; }
+        #stepperRealWorld .orb-2 { background: #3b82f6; width: 250px; height: 250px; bottom: 10%; left: 10%; }
+
+        /* Hidden Real World bg overrides */
+        #fabRealWorld { display: flex; align-items: center; justify-content: center; position: absolute; inset:0; pointer-events:none;}
+        #fabRealWorld div { font-family: inherit; font-size: 15vw; font-weight: 900; color: #fff; opacity: 0.03; line-height: 1; }
+
+        /* ==========================================================================
+           CORE LIQUID GLASS ENGINE STYLES
+           ========================================================================== */
+        /* 1. Precision Lens */
+        .lens-glass-element { position: absolute; cursor: grab; touch-action: none; user-select: none; will-change: transform; overflow: hidden; z-index: 10; } 
+        .lens-glass-element:active { cursor: grabbing; } 
+        .lens-glass-inner { width: 100%; height: 100%; border-radius: inherit; will-change: transform, box-shadow; position: absolute; top: 0; left: 0; z-index: 3; pointer-events: none; } 
+        .lens-content-clone { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; border-radius: inherit; z-index: 1; will-change: filter; contain: strict; } 
+        .use-backdrop-filter .lens-content-clone { display: none; } 
+        .use-backdrop-filter .lens-glass-inner { backdrop-filter: url(#lensLiquidGlassFilter); -webkit-backdrop-filter: url(#lensLiquidGlassFilter); } 
+        .lens-clone-inner { position: absolute; top: 0; left: 0; pointer-events: none; will-change: transform; contain: layout style paint; background: radial-gradient(circle at 50% 50%, #1e1e28 0%, #0a0a0e 100%); }
+
+        /* 2. Slider */
+        .slider-container { position: relative; width: 330px; height: 60px; } 
+        .slider-track { display: inline-block; position: absolute; width: 330px; height: 18px; left: 0; top: 21px; background-color: rgba(255,255,255,0.05); border-radius: 100px; cursor: pointer; box-shadow: inset 0 2px 4px rgba(0,0,0,0.5); } 
+        .slider-track-inner { width: 100%; height: 100%; overflow: hidden; border-radius: 100px; } 
+        .slider-fill { height: 100%; width: 10%; border-radius: 100px; background: linear-gradient(90deg, #3b82f6, #60a5fa); box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);} 
+        .slider-thumb { position: absolute; width: 90px; height: 60px; top: 0; border-radius: 30px; transform: scale(0.6); transform-origin: center center; cursor: pointer; touch-action: none; user-select: none; background-color: rgba(255, 255, 255, 1); box-shadow: 0 3px 14px rgba(0,0,0,0.3); overflow: hidden; will-change: transform, background-color; z-index: 10; } 
+        .slider-thumb-clone { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; border-radius: inherit; z-index: 1; opacity: 0; will-change: opacity; } 
+        .use-backdrop-filter .slider-thumb-clone { display: none; } 
+        .slider-thumb-clone-inner { position: absolute; top: 0; left: 0; pointer-events: none; background: radial-gradient(circle at 50% 50%, #0d2746 0%, #050b14 100%); } 
+        .slider-thumb-clone-inner::before { content: ""; position: absolute; left: var(--track-left, 0); top: var(--track-top, 0); width: 330px; height: 18px; border-radius: 100px; background-color: rgba(255,255,255,0.05); overflow: hidden; } 
+        .slider-thumb-clone-inner::after { content: ""; position: absolute; left: var(--track-left, 0); top: var(--track-top, 0); width: calc(330px * var(--fill-width, 10) / 100); height: 18px; border-radius: 100px; background: linear-gradient(90deg, #3b82f6, #60a5fa); } 
+        .slider-thumb-inner { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: inherit; z-index: 3; pointer-events: none; } 
+        .use-backdrop-filter .slider-thumb-inner { backdrop-filter: url(#sliderGlassFilter); -webkit-backdrop-filter: url(#sliderGlassFilter); }
+
+        /* 3. Switch */
+        .switch-container { position: relative; } 
+        .switch-track { display: inline-block; position: relative; width: 160px; height: 67px; background-color: rgba(255,255,255,0.05); border-radius: 100px; cursor: pointer; box-shadow: inset 0 2px 10px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.05); } 
+        .switch-thumb { position: absolute; width: 146px; height: 92px; border-radius: 46px; top: 33.5px; transform: translateY(-50%) scale(0.65); transform-origin: center center; cursor: pointer; touch-action: none; user-select: none; background-color: rgba(255, 255, 255, 1); box-shadow: 0 10px 30px rgba(0,0,0,0.5); overflow: hidden; will-change: transform, left, background-color, box-shadow; z-index: 10; } 
+        .switch-thumb-clone { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; border-radius: inherit; z-index: 1; opacity: 0; will-change: opacity; } 
+        .use-backdrop-filter .switch-thumb-clone { display: none; } 
+        .switch-thumb-clone-inner { position: absolute; top: 0; left: 0; pointer-events: none; background: radial-gradient(circle at 50% 50%, #291238 0%, #0d0514 100%); } 
+        .switch-thumb-clone-inner::before { content: ""; position: absolute; left: var(--track-left, 0); top: var(--track-top, 0); width: 160px; height: 67px; border-radius: 100px; background-color: var(--switch-track-color, rgba(255,255,255,0.05)); } 
+        .switch-thumb-inner { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: inherit; z-index: 3; pointer-events: none; } 
+        .use-backdrop-filter .switch-thumb-inner { backdrop-filter: url(#switchGlassFilter); -webkit-backdrop-filter: url(#switchGlassFilter); }
+
+        /* 4. Dock */
+        .dock-wrapper { position: relative; height: 80px; z-index: 10; margin-top: 150px; } 
+        .dock-track { position: relative; height: 100%; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 40px; box-shadow: 0 30px 60px rgba(0,0,0,0.6), inset 0 1px 1px rgba(255,255,255,0.1); display: flex; align-items: center; padding: 0 8px; z-index: 1; touch-action: none; user-select: none; cursor: grab; } 
+        .dock-track.dragging { cursor: grabbing; } 
+        .dock-bubble { position: absolute; width: 80px; height: 66px; border-radius: 33px; top: 7px; left: 8px; pointer-events: none; z-index: 2; will-change: transform; transform-origin: center center; } 
+        .dock-bubble-clone { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; border-radius: inherit; z-index: 1; will-change: filter, transform; contain: strict; } 
+        .use-backdrop-filter .dock-bubble-clone { display: none; } 
+        .use-backdrop-filter .dock-bubble-inner { backdrop-filter: url(#dockGlassFilter); -webkit-backdrop-filter: url(#dockGlassFilter); } 
+        .dock-clone-world { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; will-change: transform; transform-origin: top left; background: radial-gradient(circle at 50% 100%, #302213 0%, #0d0a05 100%); } 
+        .dock-bubble-inner { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: inherit; z-index: 3; background: rgba(255, 255, 255, 0.05); box-shadow: 0 10px 30px rgba(0,0,0,0.5), inset 0 2px 5px rgba(255,255,255,0.3), inset 0 0 20px rgba(255,255,255,0.1); border: 1px solid rgba(255, 255, 255, 0.2); pointer-events: none;} 
+        .dock-item { width: 80px; height: 100%; cursor: pointer; z-index: 10; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; opacity: 0.5; color: #fff; transition: opacity 0.2s ease, color 0.3s ease; pointer-events: none; } 
+        .dock-item.active, .dock-item:hover { opacity: 1; } 
+        .dock-item.active { color: #fff; } 
+        .dock-item svg { width: 26px; height: 26px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); } 
+        .dock-item span { font-size: 11px; transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); } 
+        .dock-item.active svg { transform: scale(1.15) translateY(-2px); filter: drop-shadow(0 0 8px rgba(255,255,255,0.4)); } 
+        .dock-item.active span { transform: translateY(2px); }
+
+        /* 5. Cursor */
+        .cursor-demo-content { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; } 
+        .liquid-cursor { position: absolute; top: 0; left: 0; width: 90px; height: 90px; border-radius: 50%; pointer-events: none; z-index: 9999; will-change: transform; transform-origin: center center; opacity: 0; transition: opacity 0.3s ease; } 
+        .liquid-cursor.visible { opacity: 1; } 
+        .cursor-inner { width: 100%; height: 100%; border-radius: inherit; position: absolute; top: 0; left: 0; z-index: 3; pointer-events: none; } 
+        .cursor-clone { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; border-radius: inherit; z-index: 1; will-change: filter; contain: strict; } 
+        .use-backdrop-filter .cursor-clone { display: none; } 
+        .use-backdrop-filter .cursor-inner { backdrop-filter: url(#cursorGlassFilter); -webkit-backdrop-filter: url(#cursorGlassFilter); } 
+        .cursor-clone-world { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; will-change: transform; transform-origin: top left; background: #050508; }
+
+        /* 6. Button */
+        .liquid-button { position: relative; width: 220px; height: 74px; border-radius: 100px; cursor: pointer; display: flex; align-items: center; justify-content: center; touch-action: none; user-select: none; z-index: 10; will-change: transform; } 
+        .liquid-button-clone { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; border-radius: inherit; z-index: 1; will-change: filter, transform; contain: strict; } 
+        .use-backdrop-filter .liquid-button-clone { display: none; } 
+        .use-backdrop-filter .liquid-button-inner { backdrop-filter: url(#buttonGlassFilter); -webkit-backdrop-filter: url(#buttonGlassFilter); } 
+        .liquid-button-clone-world { position: absolute; top: 0; left: 0; pointer-events: none; will-change: transform; transform-origin: top left; background: radial-gradient(circle at 50% 50%, #0c333a 0%, #030d0e 100%); } 
+        .liquid-button-inner { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: inherit; z-index: 3; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.2); pointer-events: none; will-change: box-shadow; } 
+
+        /* 7. Tabs */
+        .tabs-container { position: relative; width: 400px; height: 60px; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 100px; display: flex; align-items: center; padding: 0 4px; z-index: 10; box-shadow: inset 0 4px 10px rgba(0,0,0,0.5); } 
+        .tabs-indicator { position: absolute; height: 52px; top: 3px; left: 4px; border-radius: 100px; pointer-events: none; z-index: 2; will-change: transform, width; transform-origin: left center; } 
+        .tabs-item { flex: 1; height: 100%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; color: #fff; opacity: 0.5; transition: opacity 0.3s ease; } 
+        .tabs-item.active { opacity: 1; text-shadow: 0 0 10px rgba(255,255,255,0.3); } 
+        .tabs-indicator-clone { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; border-radius: inherit; z-index: 1; will-change: filter; contain: strict; } 
+        .use-backdrop-filter .tabs-indicator-clone { display: none; } 
+        .use-backdrop-filter .tabs-indicator-inner { backdrop-filter: url(#tabsGlassFilter); -webkit-backdrop-filter: url(#tabsGlassFilter); } 
+        .tabs-clone-world { position: absolute; top: 0; left: 0; pointer-events: none; will-change: transform; transform-origin: top left; background: radial-gradient(circle at 50% 100%, #3a1a2b 0%, #0e0509 100%); } 
+        .tabs-indicator-inner { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: inherit; z-index: 3; background: rgba(255, 255, 255, 0.1); box-shadow: 0 10px 20px rgba(0,0,0,0.4), inset 0 2px 4px rgba(255,255,255,0.2); border: 1px solid rgba(255, 255, 255, 0.15); }
+
+        /* 8. Dial */
+        .dial-container { position: relative; width: 180px; height: 180px; border-radius: 50%; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.05); box-shadow: inset 0 10px 30px rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 10;} 
+        .dial-ticks { position: absolute; inset: -20px; border-radius: 50%; border: 2px dotted rgba(255,255,255,0.1); pointer-events: none; } 
+        .liquid-dial { position: absolute; width: 140px; height: 140px; border-radius: 50%; cursor: grab; touch-action: none; z-index: 15; will-change: transform; } 
+        .liquid-dial:active { cursor: grabbing; } 
+        .liquid-dial-clone { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; border-radius: inherit; z-index: 1; will-change: filter; contain: strict; } 
+        .use-backdrop-filter .liquid-dial-clone { display: none; } 
+        .use-backdrop-filter .liquid-dial-inner { backdrop-filter: url(#dialGlassFilter); -webkit-backdrop-filter: url(#dialGlassFilter); } 
+        .liquid-dial-clone-world { position: absolute; top: 0; left: 0; pointer-events: none; will-change: transform; transform-origin: center center; background: radial-gradient(circle at 50% 50%, #1a1a24 0%, #07070a 100%); } 
+        .liquid-dial-inner { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: inherit; z-index: 3; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 15px 40px rgba(0,0,0,0.6), inset 0 2px 5px rgba(255,255,255,0.2); pointer-events: none; } 
+        .dial-indicator { position: absolute; top: 15px; left: 50%; transform: translateX(-50%); width: 10px; height: 10px; border-radius: 50%; background: #fff; box-shadow: 0 0 15px #fff; z-index: 5; }
+
+        /* 9. Input */
+        .liquid-input-wrapper { position: relative; width: 340px; height: 60px; z-index: 10; will-change: transform; } 
+        .liquid-input-glass { position: absolute; inset: 0; border-radius: 100px; pointer-events: none; } 
+        .liquid-input-clone { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; border-radius: inherit; z-index: 1; will-change: filter; contain: strict; } 
+        .use-backdrop-filter .liquid-input-clone { display: none; } 
+        .use-backdrop-filter .liquid-input-inner { backdrop-filter: url(#inputGlassFilter); -webkit-backdrop-filter: url(#inputGlassFilter); } 
+        .liquid-input-clone-world { position: absolute; top: 0; left: 0; pointer-events: none; will-change: transform; transform-origin: top left; background: radial-gradient(circle at 50% 50%, #38151b 0%, #110507 100%); } 
+        .liquid-input-inner { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: inherit; z-index: 3; background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: inset 0 4px 10px rgba(0,0,0,0.5), 0 20px 40px rgba(0,0,0,0.4); pointer-events: none; transition: box-shadow 0.3s ease, border-color 0.3s ease;} 
+        .liquid-input-wrapper.focused .liquid-input-inner { box-shadow: inset 0 2px 5px rgba(0,0,0,0.2), 0 20px 50px rgba(0, 0, 0, 0.6); border-color: rgba(255, 255, 255, 0.3); } 
+        .liquid-input-field { position: absolute; inset: 0; width: 100%; height: 100%; border: none; background: transparent; padding: 0 2rem; font-size: 1.1rem; color: #fff; outline: none; z-index: 5; letter-spacing: 1px;} 
+        .liquid-input-field::placeholder { color: rgba(255,255,255,0.4); }
+
+        /* 10. Volume */
+        .vol-container { position: relative; width: 80px; height: 320px; border-radius: 40px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; justify-content: flex-end; align-items: center; z-index: 10; cursor: pointer; touch-action: none; box-shadow: inset 0 10px 30px rgba(0,0,0,0.8);} 
+        .vol-glass { position: absolute; width: 80px; height: 320px; bottom: -1px; left: -1px; border-radius: 40px; pointer-events: none; z-index: 15; will-change: transform; transform-origin: bottom center; } 
+        .vol-clone { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; border-radius: inherit; z-index: 1; will-change: filter; contain: strict; } 
+        .use-backdrop-filter .vol-clone { display: none; } 
+        .use-backdrop-filter .vol-inner { backdrop-filter: url(#volGlassFilter); -webkit-backdrop-filter: url(#volGlassFilter); } 
+        .vol-clone-world { position: absolute; top: 0; left: 0; pointer-events: none; will-change: transform; transform-origin: bottom left; background: radial-gradient(circle at 50% 50%, #302611 0%, #0e0b04 100%); } 
+        .vol-inner { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: inherit; z-index: 3; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.15); box-shadow: 0 10px 30px rgba(0,0,0,0.5); pointer-events: none; overflow: hidden;} 
+        .vol-fill { position: absolute; bottom: 0; left: 0; width: 100%; height: 50%; background: linear-gradient(to top, #d97706, #fbbf24); z-index: -1; transition: opacity 0.2s; opacity: 0.9; }
+
+        /* 11. FAB */
+        .fab-wrapper { position: relative; width: 70px; height: 70px; z-index: 10; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; }
+        .fab-menu-glass { position: absolute; bottom: 85px; left: 0; width: 70px; height: 160px; border-radius: 35px; z-index: 10; will-change: transform, opacity; transform-origin: bottom center; pointer-events: none; }
+        .fab-wrapper.open .fab-menu-glass { pointer-events: auto; }
+        .fab-menu-clone { position: absolute; inset: 0; overflow: hidden; border-radius: inherit; z-index: 1; will-change: filter; contain: strict; }
+        .use-backdrop-filter .fab-menu-clone { display: none; }
+        .use-backdrop-filter .fab-menu-inner { backdrop-filter: url(#fabMenuGlassFilter); -webkit-backdrop-filter: url(#fabMenuGlassFilter); }
+        .fab-menu-clone-world { position: absolute; top: 0; left: 0; pointer-events: none; will-change: transform; transform-origin: top left; background: radial-gradient(circle at 100% 100%, #112847 0%, #050b14 100%); }
+        .fab-menu-inner { position: absolute; inset: 0; border-radius: inherit; z-index: 3; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.15); box-shadow: 0 20px 40px rgba(0,0,0,0.5), inset 0 2px 8px rgba(255,255,255,0.2); pointer-events: none; }
+        .fab-menu-content { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; z-index: 5; }
+        .fab-icon { width: 44px; height: 44px; border-radius: 22px; border: 2px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.2s, transform 0.2s; color: white; }
+        .fab-icon:hover { background: rgba(255,255,255,0.15); transform: scale(1.05); }
+        .fab-icon svg { width: 20px; height: 20px; }
+        .fab-btn-glass { position: absolute; bottom: 0; left: 0; width: 70px; height: 70px; border-radius: 35px; cursor: pointer; z-index: 20; will-change: transform; }
+        .fab-btn-clone { position: absolute; inset: 0; overflow: hidden; border-radius: inherit; z-index: 1; will-change: filter; contain: strict; }
+        .use-backdrop-filter .fab-btn-clone { display: none; }
+        .use-backdrop-filter .fab-btn-inner { backdrop-filter: url(#fabBtnGlassFilter); -webkit-backdrop-filter: url(#fabBtnGlassFilter); }
+        .fab-btn-clone-world { position: absolute; top: 0; left: 0; pointer-events: none; will-change: transform; transform-origin: top left; background: radial-gradient(circle at 100% 100%, #112847 0%, #050b14 100%); }
+        .fab-btn-inner { position: absolute; inset: 0; border-radius: inherit; z-index: 3; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); box-shadow: 0 15px 40px rgba(0,0,0,0.6), inset 0 4px 10px rgba(255,255,255,0.2); pointer-events: none; }
+        .fab-toggle { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; z-index: 5; pointer-events: none; }
+        .fab-toggle-line { width: 22px; height: 3px; background: white; border-radius: 3px; transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .fab-wrapper.open .fab-toggle-line:nth-child(1) { transform: translateY(4px) rotate(45deg); }
+        .fab-wrapper.open .fab-toggle-line:nth-child(2) { transform: translateY(-4px) rotate(-45deg); }
+
+        /* 12. Stepper */
+        .stepper-wrapper { position: relative; width: 180px; height: 70px; z-index: 10; }
+        .stepper-glass { position: absolute; inset: 0; border-radius: 35px; will-change: transform; transform-origin: center; }
+        .stepper-clone { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; border-radius: inherit; z-index: 1; will-change: filter; contain: strict; }
+        .use-backdrop-filter .stepper-clone { display: none; }
+        .use-backdrop-filter .stepper-inner { backdrop-filter: url(#stepperGlassFilter); -webkit-backdrop-filter: url(#stepperGlassFilter); }
+        .stepper-clone-world { position: absolute; top: 0; left: 0; pointer-events: none; will-change: transform; transform-origin: top left; background: radial-gradient(circle at 50% 50%, #0f3642 0%, #040e12 100%); }
+        .stepper-inner { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: inherit; z-index: 3; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.15); box-shadow: 0 20px 40px rgba(0,0,0,0.5), inset 0 2px 6px rgba(255,255,255,0.2); pointer-events: none; }
+        .stepper-content { position: absolute; inset: 0; display: flex; justify-content: space-between; align-items: center; padding: 0 10px; z-index: 5; }
+        .stepper-btn { width: 50px; height: 50px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; pointer-events: auto; color: white; font-size: 28px; font-weight: 400; transition: background 0.2s; user-select: none; -webkit-tap-highlight-color: transparent; }
+        .stepper-btn:hover { background: rgba(255,255,255,0.1); }
+        .stepper-val { font-size: 24px; color: white; user-select: none; width: 40px; text-align: center; }
+
+    </style>
+</head>
+<body>
+
+    <header class="exhibition-header">
+        <div class="header-meta">
+            <span>UX/UI Archive</span>
+            <span>Vol. 02</span>
+        </div>
+        <h1 class="main-title">Pebble & Void</h1>
+        <p class="header-desc">A study of soft geometry and heavy physics, illuminated by gentle refractive light in dark space.</p>
+    </header>
+
+    <main class="gallery-grid">
+
+        <!-- ==========================================================================
+             01. PRECISION LENS
+             ========================================================================== -->
+        <article class="exhibit span-12">
+            <div class="exhibit-info">
+                <span class="exhibit-number">01</span>
+                <h2 class="exhibit-title">Precision Lens</h2>
+                <p class="exhibit-desc">Drag the capsule to bend the visual space. A physical magnifying glass.</p>
+            </div>
+            
+            <div class="canvas-wrapper" id="lensDemoArea">
+                <div class="lens-content" id="lensContent">
+                    <div class="lens-text">
+                        <div class="lens-label">
+                            <span class="lens-label-line"></span>
+                            <span class="lens-label-text">Optics Study</span>
+                        </div>
+                        <h3 class="lens-heading">Soft<br>Focus</h3>
+                        <p>Gentle curves and deep contrast.</p>
+                    </div>
+                    <div class="lens-image-container">
+                        <img src="https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=800&auto=format&fit=crop" draggable="false" />
+                    </div>
+                </div>
+                
+                <div class="lens-glass-element" id="lensGlassElement" style="left: 40px; top: 40px; width: 200px; height: 140px; border-radius: 70px;">
+                    <div class="lens-content-clone" id="lensContentClone">
+                        <div class="lens-clone-inner" id="lensCloneInner">
+                            <div class="lens-text">
+                                <div class="lens-label">
+                                    <span class="lens-label-line"></span>
+                                    <span class="lens-label-text">Optics Study</span>
+                                </div>
+                                <h3 class="lens-heading">Soft<br>Focus</h3>
+                                <p>Gentle curves and deep contrast.</p>
+                            </div>
+                            <div class="lens-image-container">
+                                <img src="https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=800&auto=format&fit=crop" draggable="false" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="lens-glass-inner" id="lensGlassInner"></div>
+                    <svg style="width: 0; height: 0; position: absolute;">
+                        <defs>
+                            <filter id="lensLiquidGlassFilter" x="-50%" y="-50%" width="200%" height="200%" color-interpolation-filters="sRGB">
+                                <feGaussianBlur id="lensFilterBlur" in="SourceGraphic" stdDeviation="0.5" result="blurred" />
+                                <feImage id="lensDisplacementImage" href="" x="0" y="0" width="200" height="140" result="displacement_map" preserveAspectRatio="none" />
+                                <feDisplacementMap id="lensDisplacementMap" in="blurred" in2="displacement_map" scale="50" xChannelSelector="R" yChannelSelector="G" result="displaced" />
+                                <feColorMatrix in="displaced" type="saturate" values="1.3" result="displaced_saturated" />
+                                <feImage id="lensSpecularImage" href="" x="0" y="0" width="200" height="140" result="specular_layer" preserveAspectRatio="none" />
+                                <feComponentTransfer in="specular_layer" result="specular_faded">
+                                    <feFuncA id="lensSpecularAlpha" type="linear" slope="1" />
+                                </feComponentTransfer>
+                                <feBlend in="specular_faded" in2="displaced_saturated" mode="screen" />
+                            </filter>
+                        </defs>
+                    </svg>
+                </div>
+            </div>
+        </article>
+
+        <!-- ==========================================================================
+             02. FLUID SLIDER
+             ========================================================================== -->
+        <article class="exhibit span-6">
+            <div class="exhibit-info">
+                <span class="exhibit-number">02</span>
+                <h2 class="exhibit-title">Fluid Slider</h2>
+                <p class="exhibit-desc">Squishy pill reacting to drag velocity.</p>
+            </div>
+            <div class="canvas-wrapper" id="sliderDemoArea">
+                <div class="slider-container">
+                    <div class="slider-track" id="sliderTrack">
+                        <div class="slider-track-inner">
+                            <div class="slider-fill" id="sliderFill"></div>
+                        </div>
+                    </div>
+                    <div class="slider-thumb" id="sliderThumb">
+                        <div class="slider-thumb-clone" id="sliderThumbClone">
+                            <div class="slider-thumb-clone-inner" id="sliderThumbCloneInner"></div>
+                        </div>
+                        <div class="slider-thumb-inner" id="sliderThumbInner"></div>
+                        <svg style="width: 0; height: 0; position: absolute;">
+                            <defs>
+                                <filter id="sliderGlassFilter" x="-50%" y="-50%" width="200%" height="200%" color-interpolation-filters="sRGB">
+                                    <feGaussianBlur id="sliderFilterBlur" in="SourceGraphic" stdDeviation="0" result="blurred_source" />
+                                    <feImage id="sliderDisplacementImage" href="" x="0" y="0" width="90" height="60" result="displacement_map" preserveAspectRatio="none" />
+                                    <feDisplacementMap id="sliderDisplacementMap" in="blurred_source" in2="displacement_map" scale="30" xChannelSelector="R" yChannelSelector="G" result="displaced" />
+                                    <feColorMatrix id="sliderSaturation" in="displaced" type="saturate" values="7" result="displaced_saturated" />
+                                    <feImage id="sliderSpecularImage" href="" x="0" y="0" width="90" height="60" result="specular_layer" preserveAspectRatio="none" />
+                                    <feComposite in="displaced_saturated" in2="specular_layer" operator="in" result="specular_saturated" />
+                                    <feComponentTransfer in="specular_layer" result="specular_faded">
+                                        <feFuncA id="sliderSpecularAlpha" type="linear" slope="0.4" />
+                                    </feComponentTransfer>
+                                    <feBlend in="specular_saturated" in2="displaced" mode="normal" result="withSaturation" />
+                                    <feBlend in="specular_faded" in2="withSaturation" mode="normal" />
+                                </filter>
+                            </defs>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- ==========================================================================
+             03. TACTILE SWITCH
+             ========================================================================== -->
+        <article class="exhibit span-6">
+            <div class="exhibit-info">
+                <span class="exhibit-number">03</span>
+                <h2 class="exhibit-title">Tactile Switch</h2>
+                <p class="exhibit-desc">Spring-loaded toggle sinking into the canvas.</p>
+            </div>
+            <div class="canvas-wrapper" id="switchDemoArea">
+                <div class="switch-container">
+                    <div class="switch-track" id="switchTrack">
+                        <div class="switch-thumb" id="switchThumb">
+                            <div class="switch-thumb-clone" id="switchThumbClone">
+                                <div class="switch-thumb-clone-inner" id="switchThumbCloneInner"></div>
+                            </div>
+                            <div class="switch-thumb-inner" id="switchThumbInner"></div>
+                            <svg style="width: 0; height: 0; position: absolute;">
+                                <defs>
+                                    <filter id="switchGlassFilter" x="-50%" y="-50%" width="200%" height="200%" color-interpolation-filters="sRGB">
+                                        <feGaussianBlur id="switchFilterBlur" in="SourceGraphic" stdDeviation="0.2" result="blurred_source" />
+                                        <feImage id="switchDisplacementImage" href="" x="0" y="0" width="146" height="92" result="displacement_map" preserveAspectRatio="none" />
+                                        <feDisplacementMap id="switchDisplacementMap" in="blurred_source" in2="displacement_map" scale="25" xChannelSelector="R" yChannelSelector="G" result="displaced" />
+                                        <feColorMatrix id="switchSaturation" in="displaced" type="saturate" values="6" result="displaced_saturated" />
+                                        <feImage id="switchSpecularImage" href="" x="0" y="0" width="146" height="92" result="specular_layer" preserveAspectRatio="none" />
+                                        <feComposite in="displaced_saturated" in2="specular_layer" operator="in" result="specular_saturated" />
+                                        <feComponentTransfer in="specular_layer" result="specular_faded">
+                                            <feFuncA id="switchSpecularAlpha" type="linear" slope="0.5" />
+                                        </feComponentTransfer>
+                                        <feBlend in="specular_saturated" in2="displaced" mode="normal" result="withSaturation" />
+                                        <feBlend in="specular_faded" in2="withSaturation" mode="normal" />
+                                    </filter>
+                                </defs>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- ==========================================================================
+             04. SLIDING DRAG DOCK
+             ========================================================================== -->
+        <article class="exhibit span-12">
+            <div class="exhibit-info">
+                <span class="exhibit-number">04</span>
+                <h2 class="exhibit-title">Drag Dock</h2>
+                <p class="exhibit-desc">Kinematic snapping pill highlighting icons.</p>
+            </div>
+            <div class="canvas-wrapper" id="dockDemoArea">
+                <div id="dockRealWorld" style="position:absolute; inset:0; pointer-events:none; overflow: hidden;">
+                    <div class="dock-bg-shape-1 ambient-orb"></div>
+                    <div class="dock-bg-shape-2 ambient-orb"></div>
+                </div>
+                <div class="dock-wrapper" id="dockWrapper">
+                    <div class="dock-track" id="dockTrack">
+                        <div class="dock-bubble" id="dockBubble">
+                            <div class="dock-bubble-clone" id="dockBubbleClone">
+                                <div class="dock-clone-world" id="dockCloneWorld"></div>
+                            </div>
+                            <div class="dock-bubble-inner" id="dockBubbleInner"></div>
+                            <svg style="width: 0; height: 0; position: absolute;">
+                                <defs>
+                                    <filter id="dockGlassFilter" x="-50%" y="-50%" width="200%" height="200%" color-interpolation-filters="sRGB">
+                                        <feGaussianBlur in="SourceGraphic" stdDeviation="0.8" result="blurred" />
+                                        <feImage id="dockDisplacementImage" href="" x="0" y="0" width="80" height="66" result="displacement_map" preserveAspectRatio="none" />
+                                        <feDisplacementMap id="dockDisplacementMap" in="blurred" in2="displacement_map" scale="30" xChannelSelector="R" yChannelSelector="G" result="displaced" />
+                                        <feColorMatrix in="displaced" type="saturate" values="1.2" result="displaced_saturated" />
+                                        <feImage id="dockSpecularImage" href="" x="0" y="0" width="80" height="66" result="specular_layer" preserveAspectRatio="none" />
+                                        <feComponentTransfer in="specular_layer" result="specular_faded">
+                                            <feFuncA type="linear" slope="0.8" />
+                                        </feComponentTransfer>
+                                        <feBlend in="specular_faded" in2="displaced_saturated" mode="screen" />
+                                    </filter>
+                                </defs>
+                            </svg>
+                        </div>
+                        <div class="dock-item active" data-index="0">
+                            <svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/><circle cx="12" cy="12" r="9" stroke-dasharray="4 4"/></svg>
+                            <span>Updates</span>
+                        </div>
+                        <div class="dock-item" data-index="1">
+                            <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                            <span>Calls</span>
+                        </div>
+                        <div class="dock-item" data-index="2">
+                            <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                            <span>Network</span>
+                        </div>
+                        <div class="dock-item" data-index="3">
+                            <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                            <span>Chats</span>
+                        </div>
+                        <div class="dock-item" data-index="4">
+                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                            <span>Settings</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- ==========================================================================
+             05. LIQUID SPACE CURSOR
+             ========================================================================== -->
+        <article class="exhibit span-8">
+            <div class="exhibit-info">
+                <span class="exhibit-number">05</span>
+                <h2 class="exhibit-title">Cursor Optics</h2>
+                <p class="exhibit-desc">Fluid orb tracking mouse movement over pure typography.</p>
+            </div>
+            <div class="canvas-wrapper" id="cursorDemoArea" style="cursor: none;">
+                <div id="cursorRealWorld" class="cursor-demo-content">
+                    <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=600&auto=format&fit=crop" class="cursor-bg-img-1" draggable="false" />
+                    <img src="https://images.unsplash.com/photo-1579380656108-f98e4df8ea62?q=80&w=600&auto=format&fit=crop" class="cursor-bg-img-2" draggable="false" />
+                    <h3>Liquid Space</h3>
+                    <button class="cursor-btn" id="cursorHoverBtn">Hover Me</button>
+                </div>
+                <div class="liquid-cursor" id="liquidCursor">
+                    <div class="cursor-clone" id="cursorClone">
+                        <div class="cursor-clone-world" id="cursorCloneWorld"></div>
+                    </div>
+                    <div class="cursor-inner" id="cursorInner"></div>
+                    <svg style="width: 0; height: 0; position: absolute;">
+                        <defs>
+                            <filter id="cursorGlassFilter" x="-50%" y="-50%" width="200%" height="200%" color-interpolation-filters="sRGB">
+                                <feGaussianBlur in="SourceGraphic" stdDeviation="0.5" result="blurred" />
+                                <feImage id="cursorDisplacementImage" href="" x="0" y="0" width="90" height="90" result="displacement_map" preserveAspectRatio="none" />
+                                <feDisplacementMap id="cursorDisplacementMap" in="blurred" in2="displacement_map" scale="25" xChannelSelector="R" yChannelSelector="G" result="displaced" />
+                                <feColorMatrix in="displaced" type="saturate" values="1.4" result="displaced_saturated" />
+                                <feImage id="cursorSpecularImage" href="" x="0" y="0" width="90" height="90" result="specular_layer" preserveAspectRatio="none" />
+                                <feComponentTransfer in="specular_layer" result="specular_faded">
+                                    <feFuncA type="linear" slope="0.8" />
+                                </feComponentTransfer>
+                                <feBlend in="specular_faded" in2="displaced_saturated" mode="screen" />
+                            </filter>
+                        </defs>
+                    </svg>
+                </div>
+            </div>
+        </article>
+
+        <!-- ==========================================================================
+             06. TACTILE LIQUID BUTTON
+             ========================================================================== -->
+        <article class="exhibit span-4">
+            <div class="exhibit-info">
+                <span class="exhibit-number">06</span>
+                <h2 class="exhibit-title">Liquid Button</h2>
+                <p class="exhibit-desc">Hover dynamics push and stretch.</p>
+            </div>
+            <div class="canvas-wrapper" id="buttonDemoArea">
+                <div id="buttonRealWorld" style="position:absolute; inset:0; pointer-events:none; overflow:hidden;">
+                    <div class="button-bg-shape-1 ambient-orb"></div>
+                    <div class="button-bg-shape-2 ambient-orb"></div>
+                </div>
+                <div class="liquid-button" id="liquidButton">
+                    <div class="liquid-button-clone" id="liquidButtonClone">
+                        <div class="liquid-button-clone-world" id="liquidButtonCloneWorld"></div>
+                    </div>
+                    <svg style="width: 0; height: 0; position: absolute;">
+                        <defs>
+                            <filter id="buttonGlassFilter" x="-50%" y="-50%" width="200%" height="200%" color-interpolation-filters="sRGB">
+                                <feGaussianBlur in="SourceGraphic" stdDeviation="0.8" result="blurred" />
+                                <feImage id="buttonDisplacementImage" href="" x="0" y="0" width="220" height="74" result="displacement_map" preserveAspectRatio="none" />
+                                <feDisplacementMap id="buttonDisplacementMap" in="blurred" in2="displacement_map" scale="30" xChannelSelector="R" yChannelSelector="G" result="displaced" />
+                                <feColorMatrix in="displaced" type="saturate" values="1.2" result="displaced_saturated" />
+                                <feImage id="buttonSpecularImage" href="" x="0" y="0" width="220" height="74" result="specular_layer" preserveAspectRatio="none" />
+                                <feComponentTransfer in="specular_layer" result="specular_faded">
+                                    <feFuncA type="linear" slope="0.8" />
+                                </feComponentTransfer>
+                                <feBlend in="specular_faded" in2="displaced_saturated" mode="screen" />
+                            </filter>
+                        </defs>
+                    </svg>
+                    <div class="liquid-button-inner" id="liquidButtonInner"></div>
+                    <span class="liquid-button-text">Tap Area</span>
+                </div>
+            </div>
+        </article>
+
+        <!-- ==========================================================================
+             07. MORPHING SEGMENTED CONTROL
+             ========================================================================== -->
+        <article class="exhibit span-6">
+            <div class="exhibit-info">
+                <span class="exhibit-number">07</span>
+                <h2 class="exhibit-title">Segment Control</h2>
+                <p class="exhibit-desc">Glass pill rapidly scales over items.</p>
+            </div>
+            <div class="canvas-wrapper" id="tabsDemoArea">
+                <div id="tabsRealWorld" style="position:absolute; inset:0; pointer-events:none; overflow: hidden;"></div>
+                <div class="tabs-container" id="tabsContainer">
+                    <div class="tabs-indicator" id="tabsIndicator">
+                        <div class="tabs-indicator-clone" id="tabsIndicatorClone">
+                            <div class="tabs-clone-world" id="tabsCloneWorld"></div>
+                        </div>
+                        <div class="tabs-indicator-inner" id="tabsIndicatorInner"></div>
+                        <svg style="width: 0; height: 0; position: absolute;">
+                            <defs>
+                                <filter id="tabsGlassFilter" x="-50%" y="-50%" width="200%" height="200%" color-interpolation-filters="sRGB">
+                                    <feGaussianBlur in="SourceGraphic" stdDeviation="0.5" result="blurred" />
+                                    <feImage id="tabsDisplacementImage" href="" x="0" y="0" width="130" height="52" result="displacement_map" preserveAspectRatio="none" />
+                                    <feDisplacementMap id="tabsDisplacementMap" in="blurred" in2="displacement_map" scale="25" xChannelSelector="R" yChannelSelector="G" result="displaced" />
+                                    <feColorMatrix in="displaced" type="saturate" values="1.3" result="displaced_saturated" />
+                                    <feImage id="tabsSpecularImage" href="" x="0" y="0" width="130" height="52" result="specular_layer" preserveAspectRatio="none" />
+                                    <feComponentTransfer in="specular_layer" result="specular_faded">
+                                        <feFuncA type="linear" slope="0.7" />
+                                    </feComponentTransfer>
+                                    <feBlend in="specular_faded" in2="displaced_saturated" mode="screen" />
+                                </filter>
+                            </defs>
+                        </svg>
+                    </div>
+                    <div class="tabs-item active">Core</div>
+                    <div class="tabs-item">System</div>
+                    <div class="tabs-item">Logs</div>
+                </div>
+            </div>
+        </article>
+
+        <!-- ==========================================================================
+             08. REFRACTIVE VOLUME DIAL
+             ========================================================================== -->
+        <article class="exhibit span-6">
+            <div class="exhibit-info">
+                <span class="exhibit-number">08</span>
+                <h2 class="exhibit-title">Rotation Dial</h2>
+                <p class="exhibit-desc">Circular drag interaction spinning the mesh.</p>
+            </div>
+            <div class="canvas-wrapper" id="dialDemoArea">
+                <div id="dialRealWorld" style="position:absolute; inset:0; pointer-events:none;"></div>
+                <div class="dial-container" id="dialContainer">
+                    <div class="dial-ticks"></div>
+                    <div class="liquid-dial" id="liquidDial">
+                        <div class="liquid-dial-clone" id="liquidDialClone">
+                            <div class="liquid-dial-clone-world" id="liquidDialCloneWorld">
+                                <div class="dial-container" style="border: none; box-shadow: none;">
+                                    <div class="dial-ticks"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <svg style="width: 0; height: 0; position: absolute;">
+                            <defs>
+                                <filter id="dialGlassFilter" x="-50%" y="-50%" width="200%" height="200%" color-interpolation-filters="sRGB">
+                                    <feGaussianBlur in="SourceGraphic" stdDeviation="0.5" result="blurred" />
+                                    <feImage id="dialDisplacementImage" href="" x="0" y="0" width="140" height="140" result="displacement_map" preserveAspectRatio="none" />
+                                    <feDisplacementMap id="dialDisplacementMap" in="blurred" in2="displacement_map" scale="25" xChannelSelector="R" yChannelSelector="G" result="displaced" />
+                                    <feColorMatrix in="displaced" type="saturate" values="1.2" result="displaced_saturated" />
+                                    <feImage id="dialSpecularImage" href="" x="0" y="0" width="140" height="140" result="specular_layer" preserveAspectRatio="none" />
+                                    <feComponentTransfer in="specular_layer" result="specular_faded">
+                                        <feFuncA type="linear" slope="0.9" />
+                                    </feComponentTransfer>
+                                    <feBlend in="specular_faded" in2="displaced_saturated" mode="screen" />
+                                </filter>
+                            </defs>
+                        </svg>
+                        <div class="liquid-dial-inner" id="liquidDialInner">
+                            <div class="dial-indicator"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- ==========================================================================
+             09. FLUID INPUT FIELD
+             ========================================================================== -->
+        <article class="exhibit span-12">
+            <div class="exhibit-info">
+                <span class="exhibit-number">09</span>
+                <h2 class="exhibit-title">Fluid Input</h2>
+                <p class="exhibit-desc">Typing triggers micro-vibrations across the glass box.</p>
+            </div>
+            <div class="canvas-wrapper" id="inputDemoArea">
+                <div id="inputRealWorld" style="position:absolute; inset:0; pointer-events:none; overflow: hidden;">
+                    <div class="orb-1 ambient-orb"></div>
+                    <div class="orb-2 ambient-orb"></div>
+                </div>
+                <div class="liquid-input-wrapper" id="inputWrapper">
+                    <div class="liquid-input-glass" id="inputGlass">
+                        <div class="liquid-input-clone" id="inputClone">
+                            <div class="liquid-input-clone-world" id="inputCloneWorld"></div>
+                        </div>
+                        <div class="liquid-input-inner" id="inputInner"></div>
+                        <svg style="width: 0; height: 0; position: absolute;">
+                            <defs>
+                                <filter id="inputGlassFilter" x="-50%" y="-50%" width="200%" height="200%" color-interpolation-filters="sRGB">
+                                    <feGaussianBlur in="SourceGraphic" stdDeviation="0.5" result="blurred" />
+                                    <feImage id="inputDisplacementImage" href="" x="0" y="0" width="340" height="60" result="displacement_map" preserveAspectRatio="none" />
+                                    <feDisplacementMap id="inputDisplacementMap" in="blurred" in2="displacement_map" scale="20" xChannelSelector="R" yChannelSelector="G" result="displaced" />
+                                    <feColorMatrix in="displaced" type="saturate" values="1.2" result="displaced_saturated" />
+                                    <feImage id="inputSpecularImage" href="" x="0" y="0" width="340" height="60" result="specular_layer" preserveAspectRatio="none" />
+                                    <feComponentTransfer in="specular_layer" result="specular_faded">
+                                        <feFuncA id="inputSpecAlpha" type="linear" slope="0.7" />
+                                    </feComponentTransfer>
+                                    <feBlend in="specular_faded" in2="displaced_saturated" mode="screen" />
+                                </filter>
+                            </defs>
+                        </svg>
+                    </div>
+                    <input type="text" class="liquid-input-field" id="inputField" placeholder="Provide input..." />
+                </div>
+            </div>
+        </article>
+
+        <!-- ==========================================================================
+             10. VERTICAL SQUISH VOLUME
+             ========================================================================== -->
+        <article class="exhibit span-4">
+            <div class="exhibit-info">
+                <span class="exhibit-number">10</span>
+                <h2 class="exhibit-title">Squish Volume</h2>
+                <p class="exhibit-desc">Y-axis bounds scaling applied during over-drag.</p>
+            </div>
+            <div class="canvas-wrapper" id="volDemoArea">
+                <div id="volRealWorld" style="position:absolute; inset:0; pointer-events:none; overflow:hidden;">
+                    <div class="orb-1 ambient-orb"></div>
+                </div>
+                <div class="vol-container" id="volContainer">
+                    <div class="vol-glass" id="volGlass">
+                        <div class="vol-clone" id="volClone">
+                            <div class="vol-clone-world" id="volCloneWorld"></div>
+                        </div>
+                        <div class="vol-inner" id="volInner">
+                            <div class="vol-fill" id="volFill"></div>
+                        </div>
+                        <svg style="width: 0; height: 0; position: absolute;">
+                            <defs>
+                                <filter id="volGlassFilter" x="-50%" y="-50%" width="200%" height="200%" color-interpolation-filters="sRGB">
+                                    <feGaussianBlur in="SourceGraphic" stdDeviation="0.2" result="blurred" />
+                                    <feImage id="volDisplacementImage" href="" x="0" y="0" width="80" height="320" result="displacement_map" preserveAspectRatio="none" />
+                                    <feDisplacementMap id="volDisplacementMap" in="blurred" in2="displacement_map" scale="40" xChannelSelector="R" yChannelSelector="G" result="displaced" />
+                                    <feColorMatrix in="displaced" type="saturate" values="1.1" result="displaced_saturated" />
+                                    <feImage id="volSpecularImage" href="" x="0" y="0" width="80" height="320" result="specular_layer" preserveAspectRatio="none" />
+                                    <feComponentTransfer in="specular_layer" result="specular_faded">
+                                        <feFuncA type="linear" slope="0.8" />
+                                    </feComponentTransfer>
+                                    <feBlend in="specular_faded" in2="displaced_saturated" mode="screen" />
+                                </filter>
+                            </defs>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- ==========================================================================
+             11. EXPANDING GLASS FAB COMPONENT
+             ========================================================================== -->
+        <article class="exhibit span-4">
+            <div class="exhibit-info">
+                <span class="exhibit-number">11</span>
+                <h2 class="exhibit-title">Layered FAB</h2>
+                <p class="exhibit-desc">Elements push each other physically.</p>
+            </div>
+            <div class="canvas-wrapper" id="fabDemoArea">
+                <div id="fabRealWorld">
+                    <div>MENU</div>
+                </div>
+                
+                <div class="fab-wrapper" id="fabWrapper">
+                    <div class="fab-menu-glass" id="fabMenuGlass">
+                        <div class="fab-menu-clone" id="fabMenuClone">
+                            <div class="fab-menu-clone-world" id="fabMenuCloneWorld"></div>
+                        </div>
+                        <div class="fab-menu-inner" id="fabMenuInner"></div>
+                        <svg style="width: 0; height: 0; position: absolute;">
+                            <defs>
+                                <filter id="fabMenuGlassFilter" x="-50%" y="-50%" width="200%" height="200%" color-interpolation-filters="sRGB">
+                                    <feGaussianBlur in="SourceGraphic" stdDeviation="0.5" result="blurred" />
+                                    <feImage id="fabMenuDisplacementImage" href="" x="0" y="0" width="70" height="160" result="displacement_map" preserveAspectRatio="none" />
+                                    <feDisplacementMap id="fabMenuDisplacementMap" in="blurred" in2="displacement_map" scale="35" xChannelSelector="R" yChannelSelector="G" result="displaced" />
+                                    <feColorMatrix in="displaced" type="saturate" values="1.2" result="displaced_saturated" />
+                                    <feImage id="fabMenuSpecularImage" href="" x="0" y="0" width="70" height="160" result="specular_layer" preserveAspectRatio="none" />
+                                    <feComponentTransfer in="specular_layer" result="specular_faded">
+                                        <feFuncA type="linear" slope="0.7" />
+                                    </feComponentTransfer>
+                                    <feBlend in="specular_faded" in2="displaced_saturated" mode="screen" />
+                                </filter>
+                            </defs>
+                        </svg>
+                        <div class="fab-menu-content">
+                            <div class="fab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg></div>
+                            <div class="fab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg></div>
+                        </div>
+                    </div>
+
+                    <div class="fab-btn-glass" id="fabBtnGlass">
+                        <div class="fab-btn-clone" id="fabBtnClone">
+                            <div class="fab-btn-clone-world" id="fabBtnCloneWorld"></div>
+                        </div>
+                        <div class="fab-btn-inner" id="fabBtnInner"></div>
+                        <svg style="width: 0; height: 0; position: absolute;">
+                            <defs>
+                                <filter id="fabBtnGlassFilter" x="-50%" y="-50%" width="200%" height="200%" color-interpolation-filters="sRGB">
+                                    <feGaussianBlur in="SourceGraphic" stdDeviation="0.5" result="blurred" />
+                                    <feImage id="fabBtnDisplacementImage" href="" x="0" y="0" width="70" height="70" result="displacement_map" preserveAspectRatio="none" />
+                                    <feDisplacementMap id="fabBtnDisplacementMap" in="blurred" in2="displacement_map" scale="25" xChannelSelector="R" yChannelSelector="G" result="displaced" />
+                                    <feColorMatrix in="displaced" type="saturate" values="1.2" result="displaced_saturated" />
+                                    <feImage id="fabBtnSpecularImage" href="" x="0" y="0" width="70" height="70" result="specular_layer" preserveAspectRatio="none" />
+                                    <feComponentTransfer in="specular_layer" result="specular_faded">
+                                        <feFuncA type="linear" slope="0.8" />
+                                    </feComponentTransfer>
+                                    <feBlend in="specular_faded" in2="displaced_saturated" mode="screen" />
+                                </filter>
+                            </defs>
+                        </svg>
+                        <div class="fab-toggle">
+                            <div class="fab-toggle-line"></div>
+                            <div class="fab-toggle-line"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- ==========================================================================
+             12. MAGNETIC LIQUID STEPPER
+             ========================================================================== -->
+        <article class="exhibit span-4">
+            <div class="exhibit-info">
+                <span class="exhibit-number">12</span>
+                <h2 class="exhibit-title">Magnetic Stepper</h2>
+                <p class="exhibit-desc">Kinematic mass shifts upon tap interaction.</p>
+            </div>
+            <div class="canvas-wrapper" id="stepperDemoArea">
+                <div id="stepperRealWorld" style="position:absolute; inset:0; pointer-events:none; overflow: hidden;">
+                    <div class="orb-1 ambient-orb"></div>
+                    <div class="orb-2 ambient-orb"></div>
+                </div>
+                <div class="stepper-wrapper" id="stepperWrapper">
+                    <div class="stepper-glass" id="stepperGlass">
+                        <div class="stepper-clone" id="stepperClone">
+                            <div class="stepper-clone-world" id="stepperCloneWorld"></div>
+                        </div>
+                        <div class="stepper-inner" id="stepperInner"></div>
+
+                        <svg style="width: 0; height: 0; position: absolute;">
+                            <defs>
+                                <filter id="stepperGlassFilter" x="-50%" y="-50%" width="200%" height="200%" color-interpolation-filters="sRGB">
+                                    <feGaussianBlur in="SourceGraphic" stdDeviation="0.5" result="blurred" />
+                                    <feImage id="stepperDisplacementImage" href="" x="0" y="0" width="180" height="70" result="displacement_map" preserveAspectRatio="none" />
+                                    <feDisplacementMap id="stepperDisplacementMap" in="blurred" in2="displacement_map" scale="25" xChannelSelector="R" yChannelSelector="G" result="displaced" />
+                                    <feColorMatrix in="displaced" type="saturate" values="1.2" result="displaced_saturated" />
+                                    <feImage id="stepperSpecularImage" href="" x="0" y="0" width="180" height="70" result="specular_layer" preserveAspectRatio="none" />
+                                    <feComponentTransfer in="specular_layer" result="specular_faded">
+                                        <feFuncA type="linear" slope="0.8" />
+                                    </feComponentTransfer>
+                                    <feBlend in="specular_faded" in2="displaced_saturated" mode="screen" />
+                                </filter>
+                            </defs>
+                        </svg>
+                    </div>
+                    
+                    <div class="stepper-content">
+                        <div class="stepper-btn" id="stepMinus">-</div>
+                        <div class="stepper-val" id="stepVal">1</div>
+                        <div class="stepper-btn" id="stepPlus">+</div>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+    </main>
+
+    <!-- ==========================================================================
+         JAVASCRIPT LOGIC (Unmodified internal engine mechanics)
+         ========================================================================== -->
+    <script>
+        const SurfaceEquations = { 
+            convex_squircle: (x) => Math.pow(1 - Math.pow(1 - x, 4), 1 / 4) 
+        };
+
+        class Spring { 
+            constructor(v, s = 300, d = 20) { 
+                this.value = v; 
+                this.target = v; 
+                this.velocity = 0; 
+                this.stiffness = s; 
+                this.damping = d; 
+            } 
+            setTarget(t) { 
+                this.target = t; 
+            } 
+            update(dt) { 
+                const f = (this.target - this.value) * this.stiffness;
+                const df = this.velocity * this.damping; 
+                this.velocity += (f - df) * dt; 
+                this.value += this.velocity * dt; 
+                return this.value; 
+            } 
+            isSettled() { 
+                return Math.abs(this.target - this.value) < 0.001 && Math.abs(this.velocity) < 0.001; 
+            } 
+        }
+
+        function calculateDisplacementMap1D(gt, bw, sf, ri, s = 128) { 
+            const e = 1 / ri;
+            const r =[]; 
+            for (let i = 0; i < s; i++) { 
+                const x = i / s;
+                const y = sf(x);
+                const dx = x < 1 ? 0.0001 : -0.0001;
+                const d = (sf(Math.max(0, Math.min(1, x + dx))) - y) / dx;
+                const m = Math.sqrt(d * d + 1);
+                const n =[-d / m, -1 / m];
+                const dt = n[1];
+                const k = 1 - e * e * (1 - dt * dt); 
+                
+                if (k < 0) {
+                    r.push(0); 
+                } else { 
+                    const rf =[
+                        -(e * dt + Math.sqrt(k)) * n[0], 
+                        e - (e * dt + Math.sqrt(k)) * n[1]
+                    ]; 
+                    r.push(rf[0] * ((y * bw + gt) / rf[1])); 
+                } 
+            } 
+            return r; 
+        }
+
+        function calculateDisplacementMap2D(cw, ch, ow, oh, rad, bw, md, pMap) { 
+            const img = new ImageData(cw, ch); 
+            for (let i = 0; i < img.data.length; i += 4) {
+                img.data[i] = 128;
+                img.data[i + 1] = 128;
+                img.data[i + 3] = 255;
+            } 
+            const rSq = rad * rad;
+            const rp1Sq = (rad + 1) ** 2;
+            const rmBwSq = Math.max(0, rad - bw) ** 2;
+            const wB = ow - rad * 2;
+            const hB = oh - rad * 2;
+            const oX = (cw - ow) / 2;
+            const oY = (ch - oh) / 2; 
+
+            for (let y1 = 0; y1 < oh; y1++) {
+                for (let x1 = 0; x1 < ow; x1++) {
+                    const idx = ((oY + y1) * cw + oX + x1) * 4;
+                    const x = x1 < rad ? x1 - rad : x1 >= ow - rad ? x1 - rad - wB : 0;
+                    const y = y1 < rad ? y1 - rad : y1 >= oh - rad ? y1 - rad - hB : 0;
+                    const dSq = x * x + y * y; 
+
+                    if (dSq <= rp1Sq && dSq >= rmBwSq) {
+                        const dist = Math.sqrt(dSq);
+                        const op = dSq < rSq ? 1 : 1 - (dist - rad) / (Math.sqrt(rp1Sq) - rad);
+                        const bIdx = Math.floor(Math.max(0, Math.min(1, (rad - dist) / bw)) * pMap.length);
+                        const dVal = pMap[Math.max(0, Math.min(bIdx, pMap.length - 1))] || 0;
+                        const dX = md > 0 ? (-(dist > 0 ? x / dist : 0) * dVal) / md : 0;
+                        const dY = md > 0 ? (-(dist > 0 ? y / dist : 0) * dVal) / md : 0; 
+
+                        img.data[idx] = Math.max(0, Math.min(255, 128 + dX * 127 * op)); 
+                        img.data[idx + 1] = Math.max(0, Math.min(255, 128 + dY * 127 * op));
+                    }
+                }
+            } 
+            return img; 
+        }
+
+        function calculateSpecularHighlight(ow, oh, rad, bw) { 
+            const img = new ImageData(ow, oh);
+            const sVec =[Math.cos(Math.PI / 3), Math.sin(Math.PI / 3)];
+            const rSq = rad * rad;
+            const rp1Sq = (rad + 1) ** 2;
+            const rmSSq = Math.max(0, (rad - 1.5) ** 2); 
+
+            for (let y1 = 0; y1 < oh; y1++) {
+                for (let x1 = 0; x1 < ow; x1++) {
+                    const x = x1 < rad ? x1 - rad : x1 >= ow - rad ? x1 - rad - (ow - rad * 2) : 0;
+                    const y = y1 < rad ? y1 - rad : y1 >= oh - rad ? y1 - rad - (oh - rad * 2) : 0;
+                    const dSq = x * x + y * y; 
+
+                    if (dSq <= rp1Sq && dSq >= rmSSq) {
+                        const dist = Math.sqrt(dSq);
+                        const op = dSq < rSq ? 1 : 1 - (dist - rad) / (Math.sqrt(rp1Sq) - rad);
+                        const dp = Math.abs((dist > 0 ? x / dist : 0) * sVec[0] + (dist > 0 ? -y / dist : 0) * sVec[1]);
+                        const cf = dp * Math.sqrt(1 - (1 - Math.max(0, Math.min(1, (rad - dist) / 1.5))) ** 2);
+                        const c = Math.min(255, 255 * cf);
+                        const idx = (y1 * ow + x1) * 4; 
+
+                        img.data[idx] = img.data[idx + 1] = img.data[idx + 2] = c; 
+                        img.data[idx + 3] = Math.min(255, c * cf * op);
+                    }
+                }
+            } 
+            return img; 
+        }
+
+        function imageDataToDataURL(img) { 
+            const c = document.createElement("canvas"); 
+            c.width = img.width; 
+            c.height = img.height; 
+            c.getContext("2d").putImageData(img, 0, 0); 
+            return c.toDataURL(); 
+        }
+
+        let useBackdropFilter = false; 
+        function detectFeatures() { 
+            const t = document.createElement("div"); 
+            t.style.backdropFilter = "url(#test)"; 
+            useBackdropFilter = !!window.chrome && t.style.backdropFilter.includes("url"); 
+            if (useBackdropFilter) document.body.classList.add("use-backdrop-filter"); 
+        }
+
+        function initLensDemo() { 
+            const s = { bezelWidth: 30, glassThickness: 150, refractiveIndex: 1.5, refractionScale: 1.5, objectWidth: 200, objectHeight: 140, radius: 70, isDragging: false, dragOffset: {x: 0, y: 0}, velocityX: 0, velocityY: 0, lastX: 0, lastY: 0, lastTime: 0 }; 
+            const sp = { scale: new Spring(0.85, 400, 25), scaleX: new Spring(1, 400, 30), scaleY: new Spring(1, 400, 30), ox: new Spring(0, 400, 30), oy: new Spring(4, 400, 30), blur: new Spring(12, 400, 30), alpha: new Spring(0.15, 300, 25), rb: new Spring(0.8, 300, 18) }; 
+            let af = null; 
+            const gEl = document.getElementById("lensGlassElement"), gIn = document.getElementById("lensGlassInner"), dA = document.getElementById("lensDemoArea"), cIn = document.getElementById("lensCloneInner"); 
+            
+            const pc = calculateDisplacementMap1D(s.glassThickness, s.bezelWidth, SurfaceEquations.convex_squircle, s.refractiveIndex); 
+            s.md = Math.max(...pc.map(Math.abs)); 
+            
+            document.getElementById("lensDisplacementImage").setAttribute("href", imageDataToDataURL(calculateDisplacementMap2D(s.objectWidth, s.objectHeight, s.objectWidth, s.objectHeight, s.radius, s.bezelWidth, s.md || 1, pc))); 
+            document.getElementById("lensSpecularImage").setAttribute("href", imageDataToDataURL(calculateSpecularHighlight(s.objectWidth, s.objectHeight, s.radius, s.bezelWidth))); 
+            
+            if (!useBackdropFilter) document.getElementById("lensContentClone").style.filter = "url(#lensLiquidGlassFilter)"; 
+            
+            function updC() {
+                if (useBackdropFilter) return;
+                const aR = dA.getBoundingClientRect();
+                cIn.style.width = aR.width + "px";
+                cIn.style.height = aR.height + "px";
+                cIn.style.transform = `translate(${-(parseFloat(gEl.style.left) || 0)}px, ${-(parseFloat(gEl.style.top) || 0)}px)`;
+            } 
+            
+            function loop() {
+                const dt = Math.min(0.032, 1 / 60); 
+                sp.scale.setTarget(s.isDragging ? 1 : 0.85);
+                sp.ox.setTarget(s.isDragging ? 4 : 0);
+                sp.oy.setTarget(s.isDragging ? 16 : 4);
+                sp.blur.setTarget(s.isDragging ? 24 : 12);
+                sp.alpha.setTarget(s.isDragging ? 0.22 : 0.15);
+                sp.rb.setTarget(s.isDragging ? 1 : 0.8); 
+                
+                const vM = Math.sqrt(s.velocityX ** 2 + s.velocityY ** 2);
+                const sq = Math.min(0.15, vM / 3000);
+                
+                if (vM > 50) {
+                    const vx = s.velocityX / vM, vy = s.velocityY / vM;
+                    sp.scaleX.setTarget(1 + sq * Math.abs(vx) - sq * 0.5 * Math.abs(vy));
+                    sp.scaleY.setTarget(1 + sq * Math.abs(vy) - sq * 0.5 * Math.abs(vx));
+                } else {
+                    sp.scaleX.setTarget(1);
+                    sp.scaleY.setTarget(1);
+                } 
+                
+                const sc = sp.scale.update(dt), sx = sp.scaleX.update(dt), sy = sp.scaleY.update(dt), ox = sp.ox.update(dt), oy = sp.oy.update(dt), b = sp.blur.update(dt), a = sp.alpha.update(dt); 
+                
+                gEl.style.transform = `scale(${sc * sx}, ${sc * sy})`;
+                gIn.style.boxShadow = `${ox}px ${oy}px ${b}px rgba(0,0,0,${a}), inset ${ox * 0.3}px ${oy * 0.4}px 16px rgba(0,0,0,${a * 0.6}), inset ${-ox * 0.3}px ${-oy * 0.4}px 16px rgba(255,255,255,${a * 0.48})`; 
+                document.getElementById("lensDisplacementMap").setAttribute("scale", s.md * s.refractionScale * sp.rb.update(dt));
+                
+                if (!s.isDragging) { s.velocityX *= 0.95; s.velocityY *= 0.95; } 
+                
+                if (!(Object.values(sp).every(x => x.isSettled()) && Math.abs(s.velocityX) < 1 && Math.abs(s.velocityY) < 1)) af = requestAnimationFrame(loop);
+                else af = null;
+            } 
+            
+            gEl.addEventListener("pointerdown", e => {
+                e.preventDefault(); 
+                s.isDragging = true; 
+                gEl.setPointerCapture(e.pointerId);
+                const r = gEl.getBoundingClientRect(), cs = sp.scale.value;
+                s.dragOffset.x = (e.clientX - r.left) / cs;
+                s.dragOffset.y = (e.clientY - r.top) / cs;
+                s.lastX = e.clientX; 
+                s.lastY = e.clientY; 
+                s.lastTime = performance.now();
+                s.velocityX = 0; 
+                s.velocityY = 0;
+                if (!af) af = requestAnimationFrame(loop);
+            }); 
+            
+            gEl.addEventListener("pointermove", e => {
+                if (!s.isDragging) return;
+                e.preventDefault();
+                const cx = e.touches ? e.touches[0].clientX : e.clientX;
+                const cy = e.touches ? e.touches[0].clientY : e.clientY;
+                const dt = Math.max(1, performance.now() - s.lastTime) / 1000;
+                s.velocityX = (cx - s.lastX) / dt;
+                s.velocityY = (cy - s.lastY) / dt;
+                s.lastX = cx; 
+                s.lastY = cy; 
+                s.lastTime = performance.now();
+                const aR = dA.getBoundingClientRect();
+                let nx = cx - aR.left - s.dragOffset.x;
+                let ny = cy - aR.top - s.dragOffset.y;
+                
+                gEl.style.left = (nx < 0 ? nx * 0.3 : nx > aR.width - s.objectWidth ? aR.width - s.objectWidth + (nx - (aR.width - s.objectWidth)) * 0.3 : nx) + "px";
+                gEl.style.top = (ny < 0 ? ny * 0.3 : ny > aR.height - s.objectHeight ? aR.height - s.objectHeight + (ny - (aR.height - s.objectHeight)) * 0.3 : ny) + "px";
+                updC();
+            }); 
+            
+            gEl.addEventListener("pointerup", () => {
+                s.isDragging = false;
+                if (!af) af = requestAnimationFrame(loop);
+            });
+            
+            window.addEventListener("resize", updC);
+            updC();
+            if (!af) af = requestAnimationFrame(loop); 
+        }
+
+        function initSliderDemo() { 
+            const c = { w: 90, h: 60, r: 30, tw: 330, th: 18, bw: 16, gt: 80, ri: 1.45, sr: 0.6, sd: 1 };
+            const s = { val: 10, pd: false, md: 0 };
+            const sp = { sc: new Spring(c.sr, 2000, 80), bo: new Spring(1, 2000, 80), sr: new Spring(0.4, 100, 10) }; 
+            let af = null;
+            
+            const th = document.getElementById("sliderThumb"), tr = document.getElementById("sliderTrack"), fi = document.getElementById("sliderFill"), ci = document.getElementById("sliderThumbCloneInner"); 
+            const pc = calculateDisplacementMap1D(c.gt, c.bw, SurfaceEquations.convex_squircle, c.ri);
+            s.md = Math.max(...pc.map(Math.abs)); 
+            
+            document.getElementById("sliderDisplacementImage").setAttribute("href", imageDataToDataURL(calculateDisplacementMap2D(c.w, c.h, c.w, c.h, c.r, c.bw, s.md || 1, pc)));
+            document.getElementById("sliderSpecularImage").setAttribute("href", imageDataToDataURL(calculateSpecularHighlight(c.w, c.h, c.r, c.bw))); 
+            
+            if (!useBackdropFilter) document.getElementById("sliderThumbClone").style.filter = "url(#sliderGlassFilter)"; 
+            
+            function upd() {
+                fi.style.width = s.val + "%";
+                const tx = (c.w * c.sr) / 2 + (s.val / 100) * (c.tw - c.w * c.sr) - c.w / 2;
+                th.style.left = tx + "px";
+                if (!useBackdropFilter) {
+                    const aR = document.getElementById("sliderDemoArea").getBoundingClientRect();
+                    const cl = (aR.width - c.tw) / 2;
+                    const ct = (aR.height - c.h) / 2;
+                    ci.style.width = aR.width + "px";
+                    ci.style.height = aR.height + "px";
+                    ci.style.transform = `translate(${-(cl + tx)}px, ${-ct}px)`;
+                    ci.style.setProperty("--track-left", `${cl}px`);
+                    ci.style.setProperty("--track-top", `${ct + (c.h - c.th) / 2}px`);
+                    ci.style.setProperty("--fill-width", s.val.toString());
+                }
+            } 
+            
+            function loop() {
+                const dt = Math.min(0.032, 1 / 60);
+                sp.sc.setTarget(s.pd ? c.sd : c.sr);
+                sp.bo.setTarget(s.pd ? 0.1 : 1);
+                sp.sr.setTarget(s.pd ? 0.9 : 0.4);
+                
+                const sc = sp.sc.update(dt), bo = sp.bo.update(dt);
+                th.style.transform = `scale(${sc})`;
+                th.style.backgroundColor = `rgba(255,255,255,${bo})`;
+                document.getElementById("sliderThumbClone").style.opacity = 1 - bo;
+                document.getElementById("sliderDisplacementMap").setAttribute("scale", s.md * sp.sr.update(dt));
+                
+                if (!Object.values(sp).every(x => x.isSettled())) af = requestAnimationFrame(loop);
+                else af = null;
+            } 
+            
+            th.addEventListener("pointerdown", e => {
+                e.preventDefault(); 
+                s.pd = true; 
+                if (!af) af = requestAnimationFrame(loop);
+            });
+            
+            window.addEventListener("pointermove", e => {
+                if (!s.pd) return;
+                e.preventDefault();
+                const cx = e.touches ? e.touches[0].clientX : e.clientX;
+                const wR = c.w * c.sr;
+                const x0 = tr.getBoundingClientRect().left + wR / 2;
+                const tw = c.tw - wR;
+                s.val = Math.max(0, Math.min(100, ((Math.max(x0, Math.min(x0 + tw, cx)) - x0) / tw) * 100));
+                upd();
+            });
+            
+            window.addEventListener("pointerup", () => {
+                s.pd = false;
+                if (!af) af = requestAnimationFrame(loop);
+            });
+            
+            window.addEventListener("resize", upd);
+            upd();
+            af = requestAnimationFrame(loop); 
+        }
+
+        function initSwitchDemo() { 
+            const c = { tw: 160, th: 67, w: 146, h: 92, r: 46, bw: 19, gt: 47, ri: 1.5, sr: 0.65, sa: 0.9 };
+            const s = { chk: true, pd: false, ix: 0, xr: 1, md: 0 };
+            const sp = { xr: new Spring(1, 1000, 80), sc: new Spring(c.sr, 2000, 80), bo: new Spring(1, 2000, 80), tc: new Spring(1, 1000, 80), sr: new Spring(0.4, 100, 10) }; 
+            
+            c.ro = ((1 - c.sr) * c.w) / 2;
+            c.tr = c.tw - c.th - (c.w - c.h) * c.sr; 
+            let af = null;
+            
+            const th = document.getElementById("switchThumb"), tr = document.getElementById("switchTrack"), ci = document.getElementById("switchThumbCloneInner"); 
+            const pc = calculateDisplacementMap1D(c.gt, c.bw, SurfaceEquations.convex_squircle, c.ri);
+            s.md = Math.max(...pc.map(Math.abs)); 
+            
+            document.getElementById("switchDisplacementImage").setAttribute("href", imageDataToDataURL(calculateDisplacementMap2D(c.w, c.h, c.w, c.h, c.r, c.bw, s.md || 1, pc)));
+            document.getElementById("switchSpecularImage").setAttribute("href", imageDataToDataURL(calculateSpecularHighlight(c.w, c.h, c.r, c.bw))); 
+            
+            if (!useBackdropFilter) document.getElementById("switchThumbClone").style.filter = "url(#switchGlassFilter)"; 
+            
+            function loop() {
+                const dt = Math.min(0.032, 1 / 60);
+                sp.sc.setTarget(s.pd ? c.sa : c.sr);
+                sp.bo.setTarget(s.pd ? 0.1 : 1);
+                sp.sr.setTarget(s.pd ? 0.9 : 0.4);
+                
+                if (!s.pd) sp.xr.setTarget(s.chk ? 1 : 0);
+                sp.tc.setTarget(s.pd ? (s.xr > 0.5 ? 1 : 0) : (s.chk ? 1 : 0));
+                
+                const xr = sp.xr.update(dt), sc = sp.sc.update(dt), bo = sp.bo.update(dt), tc = sp.tc.update(dt);
+                const tx = -c.ro + (c.th - c.h * c.sr) / 2 + xr * c.tr;
+                
+                th.style.left = tx + "px";
+                th.style.transform = `translateY(-50%) scale(${sc})`;
+                th.style.backgroundColor = `rgba(255,255,255,${bo})`;
+                th.style.boxShadow = s.pd ? "0 4px 22px rgba(0,0,0,0.1), inset 2px 7px 24px rgba(0,0,0,0.09), inset -2px -7px 24px rgba(255,255,255,0.09)" : "0 10px 30px rgba(0,0,0,0.5)";
+                document.getElementById("switchThumbClone").style.opacity = 1 - bo;
+                
+                const r = Math.round(255 + (139 - 255) * tc);
+                const g = Math.round(255 + (92 - 255) * tc);
+                const b_ = Math.round(255 + (246 - 255) * tc);
+                const a = 0.05 + (0.5 - 0.05) * tc;
+                const tBg = `rgba(${r}, ${g}, ${b_}, ${a})`;
+                tr.style.backgroundColor = tBg;
+                
+                if (!useBackdropFilter) {
+                    const aR = document.getElementById("switchDemoArea").getBoundingClientRect();
+                    const cl = (aR.width - c.tw) / 2;
+                    const ct = (aR.height - c.th) / 2;
+                    ci.style.width = aR.width + "px";
+                    ci.style.height = aR.height + "px";
+                    ci.style.transform = `translate(${-(cl + tx)}px, ${-(ct + (c.th / 2 - c.h / 2))}px)`;
+                    ci.style.setProperty("--switch-track-color", tBg);
+                    ci.style.setProperty("--track-left", `${cl}px`);
+                    ci.style.setProperty("--track-top", `${ct}px`);
+                }
+                document.getElementById("switchDisplacementMap").setAttribute("scale", s.md * sp.sr.update(dt));
+                
+                if (!Object.values(sp).every(x => x.isSettled())) af = requestAnimationFrame(loop);
+                else af = null;
+            } 
+            
+            th.addEventListener("mousedown", e => {
+                e.preventDefault(); e.stopPropagation();
+                s.pd = true; s.ix = e.clientX; s.xr = s.chk ? 1 : 0;
+                if (!af) af = requestAnimationFrame(loop);
+            });
+            
+            th.addEventListener("touchstart", e => {
+                e.preventDefault(); e.stopPropagation();
+                s.pd = true; s.ix = e.touches[0].clientX; s.xr = s.chk ? 1 : 0;
+                if (!af) af = requestAnimationFrame(loop);
+            }, {passive: false});
+            
+            window.addEventListener("mousemove", e => {
+                if (!s.pd) return; e.stopPropagation();
+                const cx = e.touches ? e.touches[0].clientX : e.clientX;
+                const r = (s.chk ? 1 : 0) + (cx - s.ix) / c.tr;
+                s.xr = Math.min(1, Math.max(0, r)) + ((r < 0 ? 1 : -1) * (r < 0 ? -r : r > 1 ? r - 1 : 0)) / 22;
+                sp.xr.setTarget(s.xr);
+                if (!af) af = requestAnimationFrame(loop);
+            });
+            
+            window.addEventListener("touchmove", e => {
+                if (!s.pd) return; e.stopPropagation();
+                const cx = e.touches ? e.touches[0].clientX : e.clientX;
+                const r = (s.chk ? 1 : 0) + (cx - s.ix) / c.tr;
+                s.xr = Math.min(1, Math.max(0, r)) + ((r < 0 ? 1 : -1) * (r < 0 ? -r : r > 1 ? r - 1 : 0)) / 22;
+                sp.xr.setTarget(s.xr);
+                if (!af) af = requestAnimationFrame(loop);
+            }, {passive: false});
+            
+            window.addEventListener("mouseup", e => {
+                if (s.pd) {
+                    s.pd = false;
+                    s.chk = Math.abs(e.clientX - s.ix) < 4 ? !s.chk : s.xr > 0.5;
+                    if (!af) af = requestAnimationFrame(loop);
+                }
+            });
+            
+            window.addEventListener("touchend", e => {
+                if (s.pd) {
+                    s.pd = false;
+                    s.chk = Math.abs((e.changedTouches ? e.changedTouches[0].clientX : e.clientX) - s.ix) < 4 ? !s.chk : s.xr > 0.5;
+                    if (!af) af = requestAnimationFrame(loop);
+                }
+            });
+            
+            tr.addEventListener("click", e => {
+                if (e.target === tr) {
+                    s.chk = !s.chk;
+                    if (!af) af = requestAnimationFrame(loop);
+                }
+            });
+            
+            window.addEventListener("resize", () => {
+                if (!af) af = requestAnimationFrame(loop);
+            });
+            
+            af = requestAnimationFrame(loop); 
+        }
+
+        function initDockDemo() { 
+            const c = { w: 80, h: 66, r: 33, iw: 80, bw: 26, gt: 120, ri: 2.0, md: 0 };
+            const s = { ai: 0, id: false, go: c.w / 2 };
+            const sp = { x: new Spring(0, 450, 26), sx: new Spring(1, 500, 24), sy: new Spring(1, 500, 24), sc: new Spring(1, 400, 20) }; 
+            let af = null;
+            
+            const tr = document.getElementById('dockTrack'), bu = document.getElementById('dockBubble'), it = document.querySelectorAll('#dockDemoArea .dock-item'), cw = document.getElementById('dockCloneWorld'); 
+            const pc = calculateDisplacementMap1D(c.gt, c.bw, SurfaceEquations.convex_squircle, c.ri);
+            c.md = Math.max(...pc.map(Math.abs)); 
+            
+            document.getElementById("dockDisplacementImage").setAttribute("href", imageDataToDataURL(calculateDisplacementMap2D(c.w, c.h, c.w, c.h, c.r, c.bw, c.md || 1, pc)));
+            document.getElementById("dockSpecularImage").setAttribute("href", imageDataToDataURL(calculateSpecularHighlight(c.w, c.h, c.r, c.bw))); 
+            
+            if (!useBackdropFilter) {
+                cw.innerHTML = document.getElementById('dockRealWorld').outerHTML;
+                document.getElementById('dockBubbleClone').style.filter = "url(#dockGlassFilter)";
+            } 
+            
+            function uAI(tx) {
+                const mx = (it.length - 1) * c.iw;
+                const cx = Math.max(0, Math.min(tx, mx));
+                const hi = Math.round(cx / c.iw);
+                if (hi !== s.ai) {
+                    s.ai = hi;
+                    it.forEach(e => e.classList.remove('active'));
+                    if (it[hi]) it[hi].classList.add('active');
+                }
+            } 
+            
+            function loop() {
+                const dt = Math.min(0.032, 1 / 60);
+                const bs = sp.sc.update(dt);
+                const vx = Math.abs(sp.x.velocity);
+                const st = vx / 1200;
+                
+                sp.sx.setTarget(1 + st);
+                sp.sy.setTarget(Math.max(0.6, 1 - st * 0.3));
+                
+                const cx = sp.x.update(dt), sx = sp.sx.update(dt) * bs, sy = sp.sy.update(dt) * bs;
+                bu.style.transform = `translateX(${cx}px) scale(${sx}, ${sy})`;
+                document.getElementById("dockDisplacementMap").setAttribute("scale", c.md * sx * 1.5);
+                
+                if (!useBackdropFilter) {
+                    const tR = tr.getBoundingClientRect();
+                    const dR = document.getElementById('dockDemoArea').getBoundingClientRect();
+                    const gx = tR.left - dR.left + 8 + cx;
+                    const gy = tR.top - dR.top + 7;
+                    cw.style.transform = `scale(${1 / sx}, ${1 / sy}) translate(${-gx}px, ${-gy}px)`;
+                }
+                
+                if (!Object.values(sp).every(x => x.isSettled())) af = requestAnimationFrame(loop);
+                else af = null;
+            } 
+            
+            tr.addEventListener('pointerdown', e => {
+                s.id = true;
+                tr.setPointerCapture(e.pointerId);
+                tr.classList.add('dragging');
+                sp.sc.setTarget(1.25);
+                
+                const prx = e.clientX - tr.getBoundingClientRect().left - 8;
+                const cx = sp.x.value;
+                if (prx >= cx && prx <= cx + c.w) { s.go = prx - cx; } 
+                else { s.go = c.w / 2; }
+                
+                let tx = prx - s.go;
+                tx = Math.max(0, Math.min(tx, (it.length - 1) * c.iw));
+                sp.x.setTarget(tx);
+                uAI(tx);
+                if (!af) af = requestAnimationFrame(loop);
+            }); 
+            
+            tr.addEventListener('pointermove', e => {
+                if (!s.id) return;
+                const prx = e.clientX - tr.getBoundingClientRect().left - 8;
+                let rtx = prx - s.go;
+                let tx = rtx;
+                let mx = (it.length - 1) * c.iw;
+                let mo = 15;
+                
+                if (rtx < 0) tx = -mo * (1 - Math.exp(rtx / 50));
+                else if (rtx > mx) tx = mx + mo * (1 - Math.exp(-(rtx - mx) / 50));
+                
+                sp.x.setTarget(tx);
+                uAI(tx);
+                if (!af) af = requestAnimationFrame(loop);
+            }); 
+            
+            const ed = (e) => {
+                if (!s.id) return;
+                s.id = false;
+                tr.releasePointerCapture(e.pointerId);
+                tr.classList.remove('dragging');
+                sp.sc.setTarget(1);
+                sp.x.setTarget(s.ai * c.iw);
+                if (!af) af = requestAnimationFrame(loop);
+            };
+            
+            tr.addEventListener('pointerup', ed);
+            tr.addEventListener('pointercancel', ed);
+            
+            window.addEventListener('resize', () => {
+                if (!af) af = requestAnimationFrame(loop);
+            });
+            
+            sp.x.value = sp.x.target = s.ai * c.iw;
+            af = requestAnimationFrame(loop); 
+        }
+
+        function initCursorDemo() { 
+            const c = { s: 90, r: 45, bw: 15, gt: 60, ri: 1.45, md: 0 };
+            const s = { mx: 250, my: 250, ih: false, ip: false, hm: false };
+            const sp = { x: new Spring(s.mx, 400, 25), y: new Spring(s.my, 400, 25), sc: new Spring(1, 350, 20), sa: new Spring(0.15, 300, 20) }; 
+            let af = null;
+            
+            const cr = document.getElementById('liquidCursor'), i = document.getElementById('cursorInner'), dA = document.getElementById('cursorDemoArea'), cw = document.getElementById('cursorCloneWorld'), b = document.getElementById('cursorHoverBtn'); 
+            const pc = calculateDisplacementMap1D(c.gt, c.bw, SurfaceEquations.convex_squircle, c.ri);
+            c.md = Math.max(...pc.map(Math.abs)); 
+            
+            document.getElementById("cursorDisplacementImage").setAttribute("href", imageDataToDataURL(calculateDisplacementMap2D(c.s, c.s, c.s, c.s, c.r, c.bw, c.md || 1, pc)));
+            document.getElementById("cursorSpecularImage").setAttribute("href", imageDataToDataURL(calculateSpecularHighlight(c.s, c.s, c.r, c.bw))); 
+            
+            if (!useBackdropFilter) {
+                cw.innerHTML = document.getElementById('cursorRealWorld').outerHTML;
+                document.getElementById('cursorClone').style.filter = "url(#cursorGlassFilter)";
+            } 
+            
+            function loop() {
+                const dt = Math.min(0.032, 1 / 60);
+                sp.x.setTarget(s.mx);
+                sp.y.setTarget(s.my);
+                
+                if (s.ip) { sp.sc.setTarget(0.7); sp.sa.setTarget(0.3); } 
+                else if (s.ih) { sp.sc.setTarget(1.6); sp.sa.setTarget(0.1); } 
+                else { sp.sc.setTarget(1); sp.sa.setTarget(0.15); }
+                
+                const cx = sp.x.update(dt), cy = sp.y.update(dt), cs = sp.sc.update(dt), sa = sp.sa.update(dt);
+                const ox = cx - c.s / 2;
+                const oy = cy - c.s / 2;
+                
+                cr.style.transform = `translate(${ox}px, ${oy}px) scale(${cs})`;
+                i.style.boxShadow = `0 ${8 * cs}px ${20 * cs}px rgba(0,0,0,${sa}), inset 0 4px 12px rgba(255,255,255,0.2), inset 0 -4px 12px rgba(0,0,0,0.5)`;
+                document.getElementById("cursorDisplacementMap").setAttribute("scale", c.md * 1.5 * cs);
+                
+                if (!useBackdropFilter) {
+                    const r = dA.getBoundingClientRect();
+                    cw.style.width = r.width + "px";
+                    cw.style.height = r.height + "px";
+                    cw.style.transform = `scale(${1 / cs}) translate(${-ox}px, ${-oy}px)`;
+                }
+                if (s.hm && !Object.values(sp).every(x => x.isSettled())) af = requestAnimationFrame(loop);
+                else af = null;
+            } 
+            
+            dA.addEventListener('mousemove', e => {
+                const r = dA.getBoundingClientRect();
+                s.mx = e.clientX - r.left;
+                s.my = e.clientY - r.top;
+                if (!s.hm) {
+                    s.hm = true;
+                    cr.classList.add('visible');
+                    sp.x.value = s.mx;
+                    sp.y.value = s.my;
+                }
+                if (!af) af = requestAnimationFrame(loop);
+            });
+            
+            dA.addEventListener('mousedown', () => { s.ip = true; if (!af) af = requestAnimationFrame(loop); });
+            dA.addEventListener('mouseup', () => { s.ip = false; if (!af) af = requestAnimationFrame(loop); });
+            dA.addEventListener('mouseleave', () => { cr.classList.remove('visible'); s.hm = false; });
+            dA.addEventListener('mouseenter', () => { if (s.hm) cr.classList.add('visible'); });
+            
+            b.addEventListener('mouseenter', () => { s.ih = true; if (!af) af = requestAnimationFrame(loop); });
+            b.addEventListener('mouseleave', () => { s.ih = false; if (!af) af = requestAnimationFrame(loop); });
+            
+            af = requestAnimationFrame(loop); 
+        }
+
+        function initButtonDemo() { 
+            const c = { w: 220, h: 74, r: 37, bw: 26, gt: 120, ri: 2.0, md: 0 };
+            const s = { ih: false, ip: false };
+            const sp = { sc: new Spring(1, 400, 20), sd: new Spring(8, 400, 20), rs: new Spring(0.8, 300, 20) }; 
+            let af = null;
+            
+            const b = document.getElementById('liquidButton'), i = document.getElementById('liquidButtonInner'), cw = document.getElementById('liquidButtonCloneWorld'); 
+            const pc = calculateDisplacementMap1D(c.gt, c.bw, SurfaceEquations.convex_squircle, c.ri);
+            c.md = Math.max(...pc.map(Math.abs)); 
+            
+            document.getElementById("buttonDisplacementImage").setAttribute("href", imageDataToDataURL(calculateDisplacementMap2D(c.w, c.h, c.w, c.h, c.r, c.bw, c.md || 1, pc)));
+            document.getElementById("buttonSpecularImage").setAttribute("href", imageDataToDataURL(calculateSpecularHighlight(c.w, c.h, c.r, c.bw))); 
+            
+            if (!useBackdropFilter) {
+                cw.innerHTML = document.getElementById('buttonRealWorld').outerHTML;
+                document.getElementById('liquidButtonClone').style.filter = "url(#buttonGlassFilter)";
+            } 
+            
+            function loop() {
+                const dt = Math.min(0.032, 1 / 60);
+                if (s.ip) { sp.sc.setTarget(0.9); sp.sd.setTarget(2); sp.rs.setTarget(1.5); } 
+                else if (s.ih) { sp.sc.setTarget(1.05); sp.sd.setTarget(16); sp.rs.setTarget(1.2); } 
+                else { sp.sc.setTarget(1); sp.sd.setTarget(8); sp.rs.setTarget(0.8); }
+                
+                const sc = sp.sc.update(dt), sd = sp.sd.update(dt), rs = sp.rs.update(dt);
+                b.style.transform = `scale(${sc})`;
+                i.style.boxShadow = `0 ${sd}px ${sd * 3}px rgba(0,0,0,0.4), inset 0 2px 4px rgba(255,255,255,0.2), inset 0 -2px 6px rgba(0,0,0,0.4), inset 0 0 12px rgba(255,255,255,0.1)`;
+                document.getElementById("buttonDisplacementMap").setAttribute("scale", c.md * rs);
+                
+                if (!useBackdropFilter) {
+                    const aR = document.getElementById('buttonDemoArea').getBoundingClientRect();
+                    cw.style.width = aR.width + "px";
+                    cw.style.height = aR.height + "px";
+                    const ol = (aR.width - c.w) / 2;
+                    const ot = (aR.height - c.h) / 2;
+                    cw.style.transform = `scale(${1 / sc}) translate(${-ol}px, ${-ot}px)`;
+                }
+                if (!Object.values(sp).every(x => x.isSettled())) af = requestAnimationFrame(loop);
+                else af = null;
+            } 
+            
+            b.addEventListener('mouseenter', () => { s.ih = true; if (!af) af = requestAnimationFrame(loop); });
+            b.addEventListener('mouseleave', () => { s.ih = false; s.ip = false; if (!af) af = requestAnimationFrame(loop); });
+            b.addEventListener('mousedown', () => { s.ip = true; if (!af) af = requestAnimationFrame(loop); });
+            b.addEventListener('mouseup', () => { s.ip = false; if (!af) af = requestAnimationFrame(loop); });
+            
+            b.addEventListener('touchstart', e => { e.preventDefault(); s.ip = true; if (!af) af = requestAnimationFrame(loop); }, {passive: false});
+            b.addEventListener('touchend', e => { e.preventDefault(); s.ip = false; if (!af) af = requestAnimationFrame(loop); });
+            
+            window.addEventListener('resize', () => { if (!af) af = requestAnimationFrame(loop); });
+            af = requestAnimationFrame(loop); 
+        }
+
+        function initTabsDemo() { 
+            const config = { width: 130, height: 52, radius: 26, bezelWidth: 15, glassThickness: 60, refractiveIndex: 1.6, maxDisp: 0 }; 
+            const state = { activeIndex: 0 }; 
+            const springs = { x: new Spring(0, 300, 25), scaleX: new Spring(1.0, 350, 20) }; 
+            
+            const container = document.getElementById('tabsContainer'), indicator = document.getElementById('tabsIndicator'), items = document.querySelectorAll('.tabs-item'), cloneWorld = document.getElementById('tabsCloneWorld'); 
+            let animationFrameId = null; 
+            
+            const precomputed = calculateDisplacementMap1D(config.glassThickness, config.bezelWidth, SurfaceEquations.convex_squircle, config.refractiveIndex); 
+            config.maxDisp = Math.max(...precomputed.map(Math.abs)); 
+            
+            document.getElementById("tabsDisplacementImage").setAttribute("href", imageDataToDataURL(calculateDisplacementMap2D(config.width, config.height, config.width, config.height, config.radius, config.bezelWidth, config.maxDisp || 1, precomputed))); 
+            document.getElementById("tabsSpecularImage").setAttribute("href", imageDataToDataURL(calculateSpecularHighlight(config.width, config.height, config.radius, config.bezelWidth))); 
+            
+            if (!useBackdropFilter) { 
+                cloneWorld.innerHTML = document.getElementById('tabsRealWorld').outerHTML; 
+                document.getElementById('tabsIndicatorClone').style.filter = "url(#tabsGlassFilter)"; 
+            } 
+            
+            function updateTabs() { 
+                const totalWidth = 400 - 8; 
+                const tabWidth = totalWidth / 3; 
+                springs.x.setTarget(state.activeIndex * tabWidth); 
+                const stretchAmount = Math.abs(springs.x.target - springs.x.value) / tabWidth; 
+                springs.scaleX.velocity += stretchAmount * 5; 
+                
+                items.forEach((item, idx) => { 
+                    if (idx === state.activeIndex) item.classList.add('active'); 
+                    else item.classList.remove('active'); 
+                }); 
+                
+                if (!animationFrameId) animationFrameId = requestAnimationFrame(loop); 
+            } 
+            
+            function loop() { 
+                const dt = Math.min(0.032, 1 / 60); 
+                springs.scaleX.setTarget(1.0); 
+                const cx = springs.x.update(dt), sx = springs.scaleX.update(dt); 
+                indicator.style.transform = `translateX(${cx}px) scaleX(${sx})`; 
+                document.getElementById("tabsDisplacementMap").setAttribute("scale", config.maxDisp * sx * 1.5); 
+                
+                if (!useBackdropFilter) { 
+                    const contRect = container.getBoundingClientRect(); 
+                    const demoRect = document.getElementById('tabsDemoArea').getBoundingClientRect(); 
+                    const globalX = contRect.left - demoRect.left + 4 + cx; 
+                    const globalY = contRect.top - demoRect.top + 3; 
+                    
+                    cloneWorld.style.width = demoRect.width + "px"; 
+                    cloneWorld.style.height = demoRect.height + "px"; 
+                    cloneWorld.style.transform = `scaleX(${1 / sx}) translate(${-globalX}px, ${-globalY}px)`; 
+                } 
+                if (!Object.values(springs).every(s => s.isSettled())) animationFrameId = requestAnimationFrame(loop); 
+                else animationFrameId = null; 
+            } 
+            
+            items.forEach((item, index) => { 
+                item.addEventListener('click', () => { 
+                    if (state.activeIndex !== index) { 
+                        state.activeIndex = index; 
+                        updateTabs(); 
+                    } 
+                }); 
+            }); 
+            
+            const tabWidth = (400 - 8) / 3; 
+            indicator.style.width = tabWidth + "px"; 
+            config.width = tabWidth; 
+            springs.x.value = springs.x.target = state.activeIndex * tabWidth; 
+            animationFrameId = requestAnimationFrame(loop); 
+        }
+
+        function initDialDemo() { 
+            const config = { size: 140, radius: 70, bezelWidth: 20, glassThickness: 80, refractiveIndex: 1.8, maxDisp: 0 }; 
+            const state = { isDragging: false, currentAngle: 0, startAngleOffset: 0, lastAngle: 0 }; 
+            const springs = { angle: new Spring(0, 400, 30), scale: new Spring(1, 400, 20) }; 
+            
+            const dial = document.getElementById('liquidDial'), container = document.getElementById('dialContainer'), cloneWorld = document.getElementById('liquidDialCloneWorld'); 
+            let animationFrameId = null; 
+            
+            const precomputed = calculateDisplacementMap1D(config.glassThickness, config.bezelWidth, SurfaceEquations.convex_squircle, config.refractiveIndex); 
+            config.maxDisp = Math.max(...precomputed.map(Math.abs)); 
+            
+            document.getElementById("dialDisplacementImage").setAttribute("href", imageDataToDataURL(calculateDisplacementMap2D(config.size, config.size, config.size, config.size, config.radius, config.bezelWidth, config.maxDisp || 1, precomputed))); 
+            document.getElementById("dialSpecularImage").setAttribute("href", imageDataToDataURL(calculateSpecularHighlight(config.size, config.size, config.radius, config.bezelWidth))); 
+            
+            if (!useBackdropFilter) document.getElementById('liquidDialClone').style.filter = "url(#dialGlassFilter)"; 
+            
+            function loop() { 
+                const dt = Math.min(0.032, 1 / 60); 
+                springs.scale.setTarget(state.isDragging ? 1.05 : 1.0); 
+                const ang = springs.angle.update(dt), sc = springs.scale.update(dt); 
+                dial.style.transform = `scale(${sc}) rotate(${ang}deg)`; 
+                
+                if (!useBackdropFilter) { 
+                    const areaRect = document.getElementById('dialDemoArea').getBoundingClientRect(); 
+                    cloneWorld.style.width = areaRect.width + "px"; 
+                    cloneWorld.style.height = areaRect.height + "px"; 
+                    const offsetLeft = (areaRect.width - config.size) / 2;
+                    const offsetTop = (areaRect.height - config.size) / 2; 
+                    cloneWorld.style.transform = `rotate(${-ang}deg) scale(${1 / sc}) translate(${-offsetLeft}px, ${-offsetTop}px)`; 
+                } 
+                if (!Object.values(springs).every(sp => sp.isSettled())) animationFrameId = requestAnimationFrame(loop); 
+                else animationFrameId = null; 
+            } 
+            
+            function getAngleFromEvent(e) { 
+                const rect = container.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2; 
+                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                const clientY = e.touches ? e.touches[0].clientY : e.clientY; 
+                return Math.atan2(clientY - centerY, clientX - centerX) * (180 / Math.PI); 
+            } 
+            
+            dial.addEventListener('pointerdown', (e) => { 
+                state.isDragging = true; 
+                dial.setPointerCapture(e.pointerId); 
+                state.lastAngle = getAngleFromEvent(e); 
+                if (!animationFrameId) animationFrameId = requestAnimationFrame(loop); 
+            }); 
+            
+            dial.addEventListener('pointermove', (e) => { 
+                if (!state.isDragging) return; 
+                const rawAngle = getAngleFromEvent(e); 
+                let delta = rawAngle - state.lastAngle; 
+                if (delta > 180) delta -= 360; 
+                if (delta < -180) delta += 360; 
+                state.currentAngle += delta; 
+                state.lastAngle = rawAngle; 
+                springs.angle.setTarget(state.currentAngle); 
+                if (!animationFrameId) animationFrameId = requestAnimationFrame(loop); 
+            }); 
+            
+            dial.addEventListener('pointerup', () => { 
+                state.isDragging = false; 
+                if (!animationFrameId) animationFrameId = requestAnimationFrame(loop); 
+            }); 
+            
+            animationFrameId = requestAnimationFrame(loop); 
+        }
+
+        function initInputDemo() { 
+            const config = { width: 340, height: 60, radius: 30, bezelWidth: 15, glassThickness: 60, refractiveIndex: 1.5, maxDisp: 0 }; 
+            const springs = { scale: new Spring(1.0, 400, 20), scaleX: new Spring(1.0, 400, 25), scaleY: new Spring(1.0, 400, 25) }; 
+            let isFocused = false; 
+            
+            const wrapper = document.getElementById('inputWrapper'), field = document.getElementById('inputField'), cloneWorld = document.getElementById('inputCloneWorld'); 
+            let animationFrameId = null; 
+            
+            const precomputed = calculateDisplacementMap1D(config.glassThickness, config.bezelWidth, SurfaceEquations.convex_squircle, config.refractiveIndex); 
+            config.maxDisp = Math.max(...precomputed.map(Math.abs)); 
+            
+            document.getElementById("inputDisplacementImage").setAttribute("href", imageDataToDataURL(calculateDisplacementMap2D(config.width, config.height, config.width, config.height, config.radius, config.bezelWidth, config.maxDisp || 1, precomputed))); 
+            document.getElementById("inputSpecularImage").setAttribute("href", imageDataToDataURL(calculateSpecularHighlight(config.width, config.height, config.radius, config.bezelWidth))); 
+            
+            if (!useBackdropFilter) { 
+                cloneWorld.innerHTML = document.getElementById('inputRealWorld').outerHTML; 
+                document.getElementById('inputClone').style.filter = "url(#inputGlassFilter)"; 
+            } 
+            
+            function loop() { 
+                const dt = Math.min(0.032, 1 / 60); 
+                springs.scale.setTarget(isFocused ? 1.05 : 1.0); 
+                springs.scaleX.setTarget(1.0); 
+                springs.scaleY.setTarget(1.0); 
+                
+                const s = springs.scale.update(dt), sx = springs.scaleX.update(dt), sy = springs.scaleY.update(dt); 
+                wrapper.style.transform = `scale(${s * sx}, ${s * sy})`; 
+                document.getElementById("inputDisplacementMap").setAttribute("scale", config.maxDisp * (s * sx)); 
+                
+                if (!useBackdropFilter) { 
+                    const areaRect = document.getElementById('inputDemoArea').getBoundingClientRect(); 
+                    cloneWorld.style.width = areaRect.width + "px"; 
+                    cloneWorld.style.height = areaRect.height + "px"; 
+                    const offsetLeft = (areaRect.width - config.width) / 2; 
+                    const offsetTop = (areaRect.height - config.height) / 2; 
+                    cloneWorld.style.transform = `scale(${1 / (s * sx)}, ${1 / (s * sy)}) translate(${-offsetLeft}px, ${-offsetTop}px)`; 
+                } 
+                if (!Object.values(springs).every(sp => sp.isSettled())) animationFrameId = requestAnimationFrame(loop); 
+                else animationFrameId = null; 
+            } 
+            
+            field.addEventListener('focus', () => { 
+                isFocused = true; 
+                wrapper.classList.add('focused'); 
+                if (!animationFrameId) animationFrameId = requestAnimationFrame(loop); 
+            }); 
+            
+            field.addEventListener('blur', () => { 
+                isFocused = false; 
+                wrapper.classList.remove('focused'); 
+                if (!animationFrameId) animationFrameId = requestAnimationFrame(loop); 
+            }); 
+            
+            field.addEventListener('input', () => { 
+                springs.scaleX.velocity += 1.5; 
+                springs.scaleY.velocity -= 1.0; 
+                if (!animationFrameId) animationFrameId = requestAnimationFrame(loop); 
+            }); 
+            
+            animationFrameId = requestAnimationFrame(loop); 
+        }
+
+        function initVolDemo() { 
+            const config = { width: 80, height: 320, radius: 40, bezelWidth: 20, glassThickness: 100, refractiveIndex: 1.6, maxDisp: 0 }; 
+            const state = { value: 30, isDragging: false }; 
+            const springs = { fill: new Spring(30, 300, 25), squishY: new Spring(1.0, 400, 20), squishX: new Spring(1.0, 400, 20) }; 
+            
+            const container = document.getElementById('volContainer'), glass = document.getElementById('volGlass'), fill = document.getElementById('volFill'), cloneWorld = document.getElementById('volCloneWorld'); 
+            let animationFrameId = null; 
+            
+            const precomputed = calculateDisplacementMap1D(config.glassThickness, config.bezelWidth, SurfaceEquations.convex_squircle, config.refractiveIndex); 
+            config.maxDisp = Math.max(...precomputed.map(Math.abs)); 
+            
+            document.getElementById("volDisplacementImage").setAttribute("href", imageDataToDataURL(calculateDisplacementMap2D(config.width, config.height, config.width, config.height, config.radius, config.bezelWidth, config.maxDisp || 1, precomputed))); 
+            document.getElementById("volSpecularImage").setAttribute("href", imageDataToDataURL(calculateSpecularHighlight(config.width, config.height, config.radius, config.bezelWidth))); 
+            
+            if (!useBackdropFilter) { 
+                cloneWorld.innerHTML = document.getElementById('volRealWorld').outerHTML; 
+                document.getElementById('volClone').style.filter = "url(#volGlassFilter)"; 
+            } 
+            
+            function loop() { 
+                const dt = Math.min(0.032, 1 / 60); 
+                let overpull = 0; 
+                
+                if (state.value > 100) overpull = state.value - 100; 
+                else if (state.value < 0) overpull = state.value; 
+                
+                springs.squishY.setTarget(Math.max(0.65, Math.min(1.35, 1.0 + (overpull * 0.006)))); 
+                springs.squishX.setTarget(Math.max(0.75, Math.min(1.25, 1.0 - (overpull * 0.003)))); 
+                
+                let visualVal = Math.max(0, Math.min(100, state.value)); 
+                springs.fill.setTarget(visualVal); 
+                
+                const f = springs.fill.update(dt), sy = springs.squishY.update(dt), sx = springs.squishX.update(dt); 
+                fill.style.height = `${f}%`; 
+                glass.style.transform = `scale(${sx}, ${sy})`; 
+                document.getElementById("volDisplacementMap").setAttribute("scale", config.maxDisp * sx); 
+                
+                if (!useBackdropFilter) { 
+                    const areaRect = document.getElementById('volDemoArea').getBoundingClientRect(); 
+                    cloneWorld.style.width = areaRect.width + "px"; 
+                    cloneWorld.style.height = areaRect.height + "px"; 
+                    const offsetLeft = (areaRect.width - config.width) / 2; 
+                    const offsetTop = (areaRect.height - config.height) / 2; 
+                    cloneWorld.style.transform = `scale(${1 / sx}, ${1 / sy}) translate(${-offsetLeft}px, ${-offsetTop - config.height}px)`; 
+                } 
+                
+                if (!Object.values(springs).every(sp => sp.isSettled())) animationFrameId = requestAnimationFrame(loop); 
+                else animationFrameId = null; 
+            } 
+            
+            function updateValueFromEvent(e) { 
+                const rect = container.getBoundingClientRect(); 
+                const clientY = e.touches ? e.touches[0].clientY : e.clientY; 
+                const percentage = 100 - ((clientY - rect.top) / rect.height) * 100; 
+                
+                if (state.isDragging) { 
+                    if (percentage > 100) state.value = 100 + (percentage - 100) * 0.35;
+                    else if (percentage < 0) state.value = percentage * 0.35;
+                    else state.value = percentage;
+                } else { 
+                    state.value = Math.max(0, Math.min(100, percentage)); 
+                } 
+                if (!animationFrameId) animationFrameId = requestAnimationFrame(loop); 
+            } 
+            
+            container.addEventListener('pointerdown', (e) => { 
+                state.isDragging = true; 
+                container.setPointerCapture(e.pointerId); 
+                updateValueFromEvent(e); 
+            }); 
+            container.addEventListener('pointermove', (e) => { 
+                if (state.isDragging) updateValueFromEvent(e); 
+            }); 
+            container.addEventListener('pointerup', () => { 
+                state.isDragging = false; 
+                state.value = Math.max(0, Math.min(100, state.value)); 
+                if (!animationFrameId) animationFrameId = requestAnimationFrame(loop); 
+            }); 
+            
+            animationFrameId = requestAnimationFrame(loop); 
+        }
+
+        function initFabDemo() {
+            const btnConfig = { size: 70, radius: 35, bezelWidth: 20, glassThickness: 100, refractiveIndex: 1.8, maxDisp: 0 };
+            const menuConfig = { width: 70, height: 160, radius: 35, bezelWidth: 20, glassThickness: 100, refractiveIndex: 1.8, maxDisp: 0 };
+            
+            const state = { isOpen: false, baseMenuX: 0, baseMenuY: 0, baseBtnX: 0, baseBtnY: 0 };
+            
+            const springs = { 
+                menuScale: new Spring(0.4, 400, 25), 
+                menuY: new Spring(60, 400, 25), 
+                menuOpacity: new Spring(0, 300, 20),
+                btnScale: new Spring(1.0, 500, 20)
+            };
+            
+            const wrapper = document.getElementById('fabWrapper'), demoArea = document.getElementById('fabDemoArea');
+            const btnGlass = document.getElementById('fabBtnGlass'), menuGlass = document.getElementById('fabMenuGlass');
+            const btnCloneWorld = document.getElementById('fabBtnCloneWorld'), menuCloneWorld = document.getElementById('fabMenuCloneWorld');
+            let animationFrameId = null;
+
+            const preBtn = calculateDisplacementMap1D(btnConfig.glassThickness, btnConfig.bezelWidth, SurfaceEquations.convex_squircle, btnConfig.refractiveIndex);
+            btnConfig.maxDisp = Math.max(...preBtn.map(Math.abs));
+            document.getElementById("fabBtnDisplacementImage").setAttribute("href", imageDataToDataURL(calculateDisplacementMap2D(btnConfig.size, btnConfig.size, btnConfig.size, btnConfig.size, btnConfig.radius, btnConfig.bezelWidth, btnConfig.maxDisp || 1, preBtn)));
+            document.getElementById("fabBtnSpecularImage").setAttribute("href", imageDataToDataURL(calculateSpecularHighlight(btnConfig.size, btnConfig.size, btnConfig.radius, btnConfig.bezelWidth)));
+
+            const preMenu = calculateDisplacementMap1D(menuConfig.glassThickness, menuConfig.bezelWidth, SurfaceEquations.convex_squircle, menuConfig.refractiveIndex);
+            menuConfig.maxDisp = Math.max(...preMenu.map(Math.abs));
+            document.getElementById("fabMenuDisplacementImage").setAttribute("href", imageDataToDataURL(calculateDisplacementMap2D(menuConfig.width, menuConfig.height, menuConfig.width, menuConfig.height, menuConfig.radius, menuConfig.bezelWidth, menuConfig.maxDisp || 1, preMenu)));
+            document.getElementById("fabMenuSpecularImage").setAttribute("href", imageDataToDataURL(calculateSpecularHighlight(menuConfig.width, menuConfig.height, menuConfig.radius, menuConfig.bezelWidth)));
+
+            if (!useBackdropFilter) {
+                const realHTML = document.getElementById('fabRealWorld').outerHTML;
+                btnCloneWorld.innerHTML = realHTML; 
+                menuCloneWorld.innerHTML = realHTML;
+                document.getElementById('fabBtnClone').style.filter = "url(#fabBtnGlassFilter)";
+                document.getElementById('fabMenuClone').style.filter = "url(#fabMenuGlassFilter)";
+            }
+
+            function updateClonePositions() {
+                if (useBackdropFilter) return;
+                const areaRect = demoArea.getBoundingClientRect();
+                
+                const origMenuTrans = menuGlass.style.transform; 
+                const origBtnTrans = btnGlass.style.transform;
+                
+                menuGlass.style.transform = 'none'; 
+                btnGlass.style.transform = 'none';
+                
+                const menuRect = menuGlass.getBoundingClientRect(); 
+                const btnRect = btnGlass.getBoundingClientRect();
+                
+                menuGlass.style.transform = origMenuTrans; 
+                btnGlass.style.transform = origBtnTrans;
+
+                state.baseMenuX = menuRect.left - areaRect.left; 
+                state.baseMenuY = menuRect.top - areaRect.top;
+                state.baseBtnX = btnRect.left - areaRect.left; 
+                state.baseBtnY = btnRect.top - areaRect.top;
+
+                btnCloneWorld.style.width = areaRect.width + "px"; 
+                btnCloneWorld.style.height = areaRect.height + "px";
+                menuCloneWorld.style.width = areaRect.width + "px"; 
+                menuCloneWorld.style.height = areaRect.height + "px";
+            }
+
+            function loop() {
+                const dt = Math.min(0.032, 1 / 60);
+
+                if (state.isOpen) { 
+                    springs.menuScale.setTarget(1.0); 
+                    springs.menuY.setTarget(0); 
+                    springs.menuOpacity.setTarget(1); 
+                } else { 
+                    springs.menuScale.setTarget(0.4); 
+                    springs.menuY.setTarget(60); 
+                    springs.menuOpacity.setTarget(0); 
+                }
+
+                springs.btnScale.setTarget(1.0);
+
+                const ms = springs.menuScale.update(dt), my = springs.menuY.update(dt), mo = springs.menuOpacity.update(dt), bs = springs.btnScale.update(dt);
+
+                menuGlass.style.transform = `translateY(${my}px) scale(${ms})`;
+                menuGlass.style.opacity = Math.max(0, mo); 
+                btnGlass.style.transform = `scale(${bs})`;
+
+                document.getElementById("fabBtnDisplacementMap").setAttribute("scale", btnConfig.maxDisp * bs);
+                document.getElementById("fabMenuDisplacementMap").setAttribute("scale", menuConfig.maxDisp * ms);
+
+                if (!useBackdropFilter) {
+                    btnCloneWorld.style.transform = `scale(${1 / bs}) translate(${-state.baseBtnX}px, ${-state.baseBtnY}px)`;
+                    menuCloneWorld.style.transform = `scale(${1 / ms}) translate(${-state.baseMenuX}px, ${-(state.baseMenuY + my)}px)`;
+                }
+
+                if (!Object.values(springs).every(sp => sp.isSettled())) animationFrameId = requestAnimationFrame(loop);
+                else animationFrameId = null;
+            }
+
+            btnGlass.addEventListener('click', () => {
+                state.isOpen = !state.isOpen;
+                wrapper.classList.toggle('open', state.isOpen);
+                springs.btnScale.velocity -= 3.0;
+                if (!animationFrameId) animationFrameId = requestAnimationFrame(loop);
+            });
+
+            window.addEventListener('resize', () => { 
+                updateClonePositions(); 
+                if (!animationFrameId) animationFrameId = requestAnimationFrame(loop); 
+            });
+            
+            setTimeout(() => { 
+                updateClonePositions(); 
+                animationFrameId = requestAnimationFrame(loop); 
+            }, 100);
+        }
+
+        function initStepperDemo() { 
+            const config = { width: 180, height: 70, radius: 35, bezelWidth: 20, glassThickness: 80, refractiveIndex: 1.6, maxDisp: 0 }; 
+            const state = { val: 1 }; 
+            const springs = { x: new Spring(0, 400, 20), scaleX: new Spring(1, 400, 25), scaleY: new Spring(1, 400, 25) }; 
+            
+            const wrapper = document.getElementById('stepperWrapper'), glass = document.getElementById('stepperGlass'), valEl = document.getElementById('stepVal'), cloneWorld = document.getElementById('stepperCloneWorld'), demoArea = document.getElementById('stepperDemoArea'); 
+            let animationFrameId = null; 
+            
+            const precomputed = calculateDisplacementMap1D(config.glassThickness, config.bezelWidth, SurfaceEquations.convex_squircle, config.refractiveIndex); 
+            config.maxDisp = Math.max(...precomputed.map(Math.abs)); 
+            
+            document.getElementById("stepperDisplacementImage").setAttribute("href", imageDataToDataURL(calculateDisplacementMap2D(config.width, config.height, config.width, config.height, config.radius, config.bezelWidth, config.maxDisp || 1, precomputed))); 
+            document.getElementById("stepperSpecularImage").setAttribute("href", imageDataToDataURL(calculateSpecularHighlight(config.width, config.height, config.radius, config.bezelWidth))); 
+            
+            if (!useBackdropFilter) { 
+                cloneWorld.innerHTML = document.getElementById('stepperRealWorld').outerHTML; 
+                document.getElementById('stepperClone').style.filter = "url(#stepperGlassFilter)"; 
+            } 
+            
+            function loop() { 
+                const dt = Math.min(0.032, 1 / 60); 
+                springs.x.setTarget(0); 
+                springs.scaleX.setTarget(1); 
+                springs.scaleY.setTarget(1); 
+                
+                const cx = springs.x.update(dt), sx = springs.scaleX.update(dt), sy = springs.scaleY.update(dt); 
+                glass.style.transform = `translateX(${cx}px) scale(${sx}, ${sy})`; 
+                document.getElementById("stepperDisplacementMap").setAttribute("scale", config.maxDisp * sx); 
+                
+                if (!useBackdropFilter) { 
+                    const areaRect = demoArea.getBoundingClientRect(); 
+                    cloneWorld.style.width = areaRect.width + "px"; 
+                    cloneWorld.style.height = areaRect.height + "px"; 
+                    const offsetLeft = (areaRect.width - config.width) / 2 + cx; 
+                    const offsetTop = (areaRect.height - config.height) / 2; 
+                    cloneWorld.style.transform = `scale(${1 / sx}, ${1 / sy}) translate(${-offsetLeft}px, ${-offsetTop}px)`; 
+                } 
+                if (!Object.values(springs).every(sp => sp.isSettled())) animationFrameId = requestAnimationFrame(loop); 
+                else animationFrameId = null; 
+            } 
+            
+            document.getElementById('stepMinus').addEventListener('mousedown', (e) => { 
+                e.preventDefault(); 
+                state.val = Math.max(0, state.val - 1); 
+                valEl.innerText = state.val; 
+                springs.x.velocity += 60; 
+                springs.scaleX.velocity += 1.5; 
+                springs.scaleY.velocity -= 1.0; 
+                if (!animationFrameId) animationFrameId = requestAnimationFrame(loop); 
+            }); 
+            
+            document.getElementById('stepPlus').addEventListener('mousedown', (e) => { 
+                e.preventDefault(); 
+                state.val++; 
+                valEl.innerText = state.val; 
+                springs.x.velocity -= 60; 
+                springs.scaleX.velocity += 1.5; 
+                springs.scaleY.velocity -= 1.0; 
+                if (!animationFrameId) animationFrameId = requestAnimationFrame(loop); 
+            }); 
+            
+            animationFrameId = requestAnimationFrame(loop); 
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            detectFeatures();
+            initLensDemo();
+            initSliderDemo();
+            initSwitchDemo();
+            initDockDemo();
+            initCursorDemo();
+            initButtonDemo();
+            initTabsDemo();
+            initDialDemo();
+            initInputDemo();
+            initVolDemo();
+            initFabDemo();
+            initStepperDemo();
+        });
+    </script>
+</body>
+</html>
