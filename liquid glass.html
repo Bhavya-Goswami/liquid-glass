@@ -189,10 +189,14 @@
         #volDemoArea    { height: 500px; background: radial-gradient(circle at 50% 50%, #302611 0%, #0e0b04 100%); }
         #fabDemoArea    { height: 450px; background: radial-gradient(circle at 100% 100%, #112847 0%, #050b14 100%); display: flex; align-items: flex-end; justify-content: flex-end; padding: 40px; }
         #stepperDemoArea{ background: radial-gradient(circle at 50% 50%, #0f3642 0%, #040e12 100%); }
+        
+        /* New Components Backgrounds */
+        #checkboxDemoArea { background: radial-gradient(circle at 50% 50%, #112820 0%, #040d0a 100%); }
+        #progressDemoArea { background: radial-gradient(circle at 50% 50%, #291a38 0%, #0a040d 100%); cursor: pointer; }
+        #tooltipDemoArea  { background: radial-gradient(circle at 50% 50%, #1a2a3a 0%, #050a14 100%); }
 
         /* ==========================================================================
            COMPONENT INTERNAL STYLING
-           (Adapting elements to be extremely soft and rounded)
            ========================================================================== */
            
         /* Lens */
@@ -231,6 +235,10 @@
         #volRealWorld .orb-1 { background: #f59e0b; width: 200px; height: 400px; right: 20%; top: 10%; }
         #stepperRealWorld .orb-1 { background: #06b6d4; width: 250px; height: 250px; top: 10%; right: 10%; }
         #stepperRealWorld .orb-2 { background: #3b82f6; width: 250px; height: 250px; bottom: 10%; left: 10%; }
+        
+        #checkboxRealWorld .orb-1 { background: #10b981; width: 200px; height: 200px; top: 10%; left: 10%; }
+        #progressRealWorld .orb-1 { background: #d946ef; width: 300px; height: 300px; bottom: 10%; right: 10%; }
+        #tooltipRealWorld .orb-1 { background: #3b82f6; width: 250px; height: 250px; top: 0; left: 30%; }
 
         /* Hidden Real World bg overrides */
         #fabRealWorld { display: flex; align-items: center; justify-content: center; position: absolute; inset:0; pointer-events:none;}
@@ -390,6 +398,44 @@
         .stepper-btn { width: 50px; height: 50px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; pointer-events: auto; color: white; font-size: 28px; font-weight: 400; transition: background 0.2s; user-select: none; -webkit-tap-highlight-color: transparent; }
         .stepper-btn:hover { background: rgba(255,255,255,0.1); }
         .stepper-val { font-size: 24px; color: white; user-select: none; width: 40px; text-align: center; }
+        
+        /* ==========================================================================
+           13. LIQUID CHECKBOX
+           ========================================================================== */
+        .checkbox-wrapper { position: relative; width: 64px; height: 64px; cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center; user-select: none; }
+        .checkbox-glass { position: absolute; inset: 0; border-radius: 24px; pointer-events: none; will-change: transform; transform-origin: center center; }
+        .checkbox-clone { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; border-radius: inherit; z-index: 1; will-change: filter; contain: strict; }
+        .use-backdrop-filter .checkbox-clone { display: none; }
+        .use-backdrop-filter .checkbox-inner { backdrop-filter: url(#checkboxGlassFilter); -webkit-backdrop-filter: url(#checkboxGlassFilter); }
+        .checkbox-clone-world { position: absolute; top: 0; left: 0; pointer-events: none; will-change: transform; transform-origin: top left; background: radial-gradient(circle at 50% 50%, #112820 0%, #040d0a 100%); }
+        .checkbox-inner { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: inherit; z-index: 3; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.15); box-shadow: 0 10px 20px rgba(0,0,0,0.4), inset 0 2px 4px rgba(255,255,255,0.2); pointer-events: none; transition: background 0.3s; }
+        .checkbox-mark { width: 32px; height: 32px; z-index: 5; color: #10b981; filter: drop-shadow(0 0 10px rgba(16, 185, 129, 0.5)); will-change: transform, opacity; }
+
+        /* ==========================================================================
+           14. FLUID PROGRESS BAR
+           ========================================================================== */
+        .progress-wrapper { position: relative; width: 300px; height: 36px; z-index: 10; border-radius: 18px; }
+        .progress-track { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.3); border-radius: inherit; box-shadow: inset 0 4px 10px rgba(0,0,0,0.5); }
+        .progress-glass { position: absolute; inset: 0; border-radius: inherit; pointer-events: none; will-change: transform; transform-origin: center center; }
+        .progress-fill { position: absolute; top: 0; left: 0; height: 100%; width: 0%; border-radius: inherit; background: linear-gradient(90deg, #8b5cf6, #d946ef); z-index: 2; pointer-events: none; box-shadow: 0 0 15px rgba(217, 70, 239, 0.4); }
+        .progress-clone { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; border-radius: inherit; z-index: 3; will-change: filter; contain: strict; }
+        .use-backdrop-filter .progress-clone { display: none; }
+        .use-backdrop-filter .progress-inner { backdrop-filter: url(#progressGlassFilter); -webkit-backdrop-filter: url(#progressGlassFilter); }
+        .progress-clone-world { position: absolute; top: 0; left: 0; pointer-events: none; will-change: transform; transform-origin: top left; background: radial-gradient(circle at 50% 50%, #291a38 0%, #0a040d 100%); }
+        .progress-inner { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: inherit; z-index: 4; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.15); pointer-events: none; }
+
+        /* ==========================================================================
+           15. GLASS TOOLTIP
+           ========================================================================== */
+        .tooltip-container { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10; }
+        .tooltip-trigger { font-size: 1.2rem; font-weight: 800; color: #fff; cursor: pointer; border-bottom: 2px dashed rgba(255,255,255,0.3); padding-bottom: 2px; }
+        .tooltip-glass { position: absolute; bottom: calc(100% + 15px); width: 140px; height: 46px; border-radius: 23px; pointer-events: none; z-index: 15; transform-origin: bottom center; will-change: transform, opacity; }
+        .tooltip-clone { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; border-radius: inherit; z-index: 1; will-change: filter; contain: strict; }
+        .use-backdrop-filter .tooltip-clone { display: none; }
+        .use-backdrop-filter .tooltip-inner { backdrop-filter: url(#tooltipGlassFilter); -webkit-backdrop-filter: url(#tooltipGlassFilter); }
+        .tooltip-clone-world { position: absolute; top: 0; left: 0; pointer-events: none; will-change: transform; transform-origin: top left; background: radial-gradient(circle at 50% 50%, #1a2a3a 0%, #050a14 100%); }
+        .tooltip-inner { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: inherit; z-index: 3; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.2); box-shadow: 0 10px 30px rgba(0,0,0,0.5), inset 0 2px 5px rgba(255,255,255,0.2); pointer-events: none; display: flex; align-items: center; justify-content: center; }
+        .tooltip-text { font-size: 0.95rem; font-weight: 800; color: #fff; letter-spacing: 0.05em; text-shadow: 0 2px 5px rgba(0,0,0,0.5); }
 
     </style>
 </head>
@@ -974,10 +1020,136 @@
             </div>
         </article>
 
+        <!-- ==========================================================================
+             13. LIQUID CHECKBOX
+             ========================================================================== -->
+        <article class="exhibit span-4">
+            <div class="exhibit-info">
+                <span class="exhibit-number">13</span>
+                <h2 class="exhibit-title">Liquid Checkbox</h2>
+                <p class="exhibit-desc">Pressing squishes the glass block and reveals the mark.</p>
+            </div>
+            <div class="canvas-wrapper" id="checkboxDemoArea">
+                <div id="checkboxRealWorld" style="position:absolute; inset:0; pointer-events:none; overflow: hidden;">
+                    <div class="orb-1 ambient-orb"></div>
+                </div>
+                <div class="checkbox-wrapper" id="checkboxWrapper">
+                    <div class="checkbox-glass" id="checkboxGlass">
+                        <div class="checkbox-clone" id="checkboxClone">
+                            <div class="checkbox-clone-world" id="checkboxCloneWorld"></div>
+                        </div>
+                        <div class="checkbox-inner" id="checkboxInner"></div>
+                        <svg style="width: 0; height: 0; position: absolute;">
+                            <defs>
+                                <filter id="checkboxGlassFilter" x="-50%" y="-50%" width="200%" height="200%" color-interpolation-filters="sRGB">
+                                    <feGaussianBlur in="SourceGraphic" stdDeviation="0.5" result="blurred" />
+                                    <feImage id="checkboxDisplacementImage" href="" x="0" y="0" width="64" height="64" result="displacement_map" preserveAspectRatio="none" />
+                                    <feDisplacementMap id="checkboxDisplacementMap" in="blurred" in2="displacement_map" scale="25" xChannelSelector="R" yChannelSelector="G" result="displaced" />
+                                    <feColorMatrix in="displaced" type="saturate" values="1.2" result="displaced_saturated" />
+                                    <feImage id="checkboxSpecularImage" href="" x="0" y="0" width="64" height="64" result="specular_layer" preserveAspectRatio="none" />
+                                    <feComponentTransfer in="specular_layer" result="specular_faded">
+                                        <feFuncA type="linear" slope="0.8" />
+                                    </feComponentTransfer>
+                                    <feBlend in="specular_faded" in2="displaced_saturated" mode="screen" />
+                                </filter>
+                            </defs>
+                        </svg>
+                    </div>
+                    <svg class="checkbox-mark" id="checkboxMark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                </div>
+            </div>
+        </article>
+
+        <!-- ==========================================================================
+             14. FLUID PROGRESS BAR
+             ========================================================================== -->
+        <article class="exhibit span-8">
+            <div class="exhibit-info">
+                <span class="exhibit-number">14</span>
+                <h2 class="exhibit-title">Fluid Progress</h2>
+                <p class="exhibit-desc">Liquid expansion bulging the container. Tap to test load states.</p>
+            </div>
+            <div class="canvas-wrapper" id="progressDemoArea">
+                <div id="progressRealWorld" style="position:absolute; inset:0; pointer-events:none; overflow: hidden;">
+                    <div class="orb-1 ambient-orb"></div>
+                </div>
+                <div class="progress-wrapper" id="progressWrapper">
+                    <div class="progress-track"></div>
+                    <div class="progress-glass" id="progressGlass">
+                        <div class="progress-fill" id="progressFill"></div>
+                        <div class="progress-clone" id="progressClone">
+                            <div class="progress-clone-world" id="progressCloneWorld"></div>
+                        </div>
+                        <div class="progress-inner" id="progressInner"></div>
+                        <svg style="width: 0; height: 0; position: absolute;">
+                            <defs>
+                                <filter id="progressGlassFilter" x="-50%" y="-50%" width="200%" height="200%" color-interpolation-filters="sRGB">
+                                    <feGaussianBlur in="SourceGraphic" stdDeviation="0.5" result="blurred" />
+                                    <feImage id="progressDisplacementImage" href="" x="0" y="0" width="300" height="36" result="displacement_map" preserveAspectRatio="none" />
+                                    <feDisplacementMap id="progressDisplacementMap" in="blurred" in2="displacement_map" scale="20" xChannelSelector="R" yChannelSelector="G" result="displaced" />
+                                    <feColorMatrix in="displaced" type="saturate" values="1.2" result="displaced_saturated" />
+                                    <feImage id="progressSpecularImage" href="" x="0" y="0" width="300" height="36" result="specular_layer" preserveAspectRatio="none" />
+                                    <feComponentTransfer in="specular_layer" result="specular_faded">
+                                        <feFuncA type="linear" slope="0.7" />
+                                    </feComponentTransfer>
+                                    <feBlend in="specular_faded" in2="displaced_saturated" mode="screen" />
+                                </filter>
+                            </defs>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- ==========================================================================
+             15. GLASS TOOLTIP
+             ========================================================================== -->
+        <article class="exhibit span-12">
+            <div class="exhibit-info">
+                <span class="exhibit-number">15</span>
+                <h2 class="exhibit-title">Glass Tooltip</h2>
+                <p class="exhibit-desc">Hover discovery element springing into space.</p>
+            </div>
+            <div class="canvas-wrapper" id="tooltipDemoArea">
+                <div id="tooltipRealWorld" style="position:absolute; inset:0; pointer-events:none; overflow: hidden;">
+                    <div class="orb-1 ambient-orb"></div>
+                </div>
+                <div class="tooltip-container">
+                    <div class="tooltip-trigger" id="tooltipTrigger">Hover for info</div>
+                    
+                    <div class="tooltip-glass" id="tooltipGlass">
+                        <div class="tooltip-clone" id="tooltipClone">
+                            <div class="tooltip-clone-world" id="tooltipCloneWorld"></div>
+                        </div>
+                        <div class="tooltip-inner" id="tooltipInner">
+                            <span class="tooltip-text">More details</span>
+                        </div>
+                        <svg style="width: 0; height: 0; position: absolute;">
+                            <defs>
+                                <filter id="tooltipGlassFilter" x="-50%" y="-50%" width="200%" height="200%" color-interpolation-filters="sRGB">
+                                    <feGaussianBlur in="SourceGraphic" stdDeviation="0.5" result="blurred" />
+                                    <feImage id="tooltipDisplacementImage" href="" x="0" y="0" width="140" height="46" result="displacement_map" preserveAspectRatio="none" />
+                                    <feDisplacementMap id="tooltipDisplacementMap" in="blurred" in2="displacement_map" scale="25" xChannelSelector="R" yChannelSelector="G" result="displaced" />
+                                    <feColorMatrix in="displaced" type="saturate" values="1.2" result="displaced_saturated" />
+                                    <feImage id="tooltipSpecularImage" href="" x="0" y="0" width="140" height="46" result="specular_layer" preserveAspectRatio="none" />
+                                    <feComponentTransfer in="specular_layer" result="specular_faded">
+                                        <feFuncA type="linear" slope="0.8" />
+                                    </feComponentTransfer>
+                                    <feBlend in="specular_faded" in2="displaced_saturated" mode="screen" />
+                                </filter>
+                            </defs>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </article>
+
     </main>
 
     <!-- ==========================================================================
-         JAVASCRIPT LOGIC (Unmodified internal engine mechanics)
+         JAVASCRIPT LOGIC
          ========================================================================== -->
     <script>
         const SurfaceEquations = { 
@@ -1115,6 +1287,8 @@
             useBackdropFilter = !!window.chrome && t.style.backdropFilter.includes("url"); 
             if (useBackdropFilter) document.body.classList.add("use-backdrop-filter"); 
         }
+
+        /* Demo Engine Mechanics Unmodified Above */
 
         function initLensDemo() { 
             const s = { bezelWidth: 30, glassThickness: 150, refractiveIndex: 1.5, refractionScale: 1.5, objectWidth: 200, objectHeight: 140, radius: 70, isDragging: false, dragOffset: {x: 0, y: 0}, velocityX: 0, velocityY: 0, lastX: 0, lastY: 0, lastTime: 0 }; 
@@ -2105,6 +2279,178 @@
             animationFrameId = requestAnimationFrame(loop); 
         }
 
+        function initCheckboxDemo() {
+            const config = { width: 64, height: 64, radius: 24, bezelWidth: 16, glassThickness: 60, refractiveIndex: 1.6, maxDisp: 0 };
+            const state = { isChecked: true, isPressed: false };
+            const springs = { scale: new Spring(1.0, 400, 20), checkScale: new Spring(1.0, 500, 25) };
+            
+            const wrapper = document.getElementById('checkboxWrapper'), glass = document.getElementById('checkboxGlass'), mark = document.getElementById('checkboxMark'), cloneWorld = document.getElementById('checkboxCloneWorld'), demoArea = document.getElementById('checkboxDemoArea');
+            let animationFrameId = null;
+
+            const precomputed = calculateDisplacementMap1D(config.glassThickness, config.bezelWidth, SurfaceEquations.convex_squircle, config.refractiveIndex);
+            config.maxDisp = Math.max(...precomputed.map(Math.abs));
+
+            document.getElementById("checkboxDisplacementImage").setAttribute("href", imageDataToDataURL(calculateDisplacementMap2D(config.width, config.height, config.width, config.height, config.radius, config.bezelWidth, config.maxDisp || 1, precomputed)));
+            document.getElementById("checkboxSpecularImage").setAttribute("href", imageDataToDataURL(calculateSpecularHighlight(config.width, config.height, config.radius, config.bezelWidth)));
+
+            if (!useBackdropFilter) {
+                cloneWorld.innerHTML = document.getElementById('checkboxRealWorld').outerHTML;
+                document.getElementById('checkboxClone').style.filter = "url(#checkboxGlassFilter)";
+            }
+
+            function loop() {
+                const dt = Math.min(0.032, 1 / 60);
+                springs.scale.setTarget(state.isPressed ? 0.8 : 1.0);
+                springs.checkScale.setTarget(state.isChecked ? 1.0 : 0.0);
+
+                const sc = springs.scale.update(dt), cSc = springs.checkScale.update(dt);
+
+                glass.style.transform = `scale(${sc})`;
+                mark.style.transform = `scale(${cSc})`;
+                mark.style.opacity = Math.max(0, cSc);
+                document.getElementById("checkboxDisplacementMap").setAttribute("scale", config.maxDisp * sc);
+
+                if (!useBackdropFilter) {
+                    const areaRect = demoArea.getBoundingClientRect();
+                    cloneWorld.style.width = areaRect.width + "px";
+                    cloneWorld.style.height = areaRect.height + "px";
+                    const offsetLeft = (areaRect.width - config.width) / 2;
+                    const offsetTop = (areaRect.height - config.height) / 2;
+                    cloneWorld.style.transform = `scale(${1 / sc}) translate(${-offsetLeft}px, ${-offsetTop}px)`;
+                }
+
+                if (!Object.values(springs).every(sp => sp.isSettled())) animationFrameId = requestAnimationFrame(loop);
+                else animationFrameId = null;
+            }
+
+            wrapper.addEventListener('mousedown', () => { state.isPressed = true; if (!animationFrameId) animationFrameId = requestAnimationFrame(loop); });
+            wrapper.addEventListener('touchstart', (e) => { e.preventDefault(); state.isPressed = true; if (!animationFrameId) animationFrameId = requestAnimationFrame(loop); });
+            
+            const handleRelease = () => {
+                if (state.isPressed) {
+                    state.isPressed = false;
+                    state.isChecked = !state.isChecked;
+                    if (!animationFrameId) animationFrameId = requestAnimationFrame(loop);
+                }
+            };
+
+            wrapper.addEventListener('mouseup', handleRelease);
+            wrapper.addEventListener('touchend', handleRelease);
+            wrapper.addEventListener('mouseleave', () => { state.isPressed = false; if (!animationFrameId) animationFrameId = requestAnimationFrame(loop); });
+
+            animationFrameId = requestAnimationFrame(loop);
+        }
+
+        function initProgressDemo() {
+            const config = { width: 300, height: 36, radius: 18, bezelWidth: 12, glassThickness: 50, refractiveIndex: 1.5, maxDisp: 0 };
+            const state = { progress: 40 };
+            const springs = { progress: new Spring(40, 200, 25), scaleY: new Spring(1.0, 400, 20) };
+            
+            const wrapper = document.getElementById('progressDemoArea'), glass = document.getElementById('progressGlass'), fill = document.getElementById('progressFill'), cloneWorld = document.getElementById('progressCloneWorld');
+            let animationFrameId = null;
+
+            const precomputed = calculateDisplacementMap1D(config.glassThickness, config.bezelWidth, SurfaceEquations.convex_squircle, config.refractiveIndex);
+            config.maxDisp = Math.max(...precomputed.map(Math.abs));
+
+            document.getElementById("progressDisplacementImage").setAttribute("href", imageDataToDataURL(calculateDisplacementMap2D(config.width, config.height, config.width, config.height, config.radius, config.bezelWidth, config.maxDisp || 1, precomputed)));
+            document.getElementById("progressSpecularImage").setAttribute("href", imageDataToDataURL(calculateSpecularHighlight(config.width, config.height, config.radius, config.bezelWidth)));
+
+            if (!useBackdropFilter) {
+                cloneWorld.innerHTML = document.getElementById('progressRealWorld').outerHTML;
+                document.getElementById('progressClone').style.filter = "url(#progressGlassFilter)";
+            }
+
+            function loop() {
+                const dt = Math.min(0.032, 1 / 60);
+                springs.progress.setTarget(state.progress);
+                springs.scaleY.setTarget(1.0);
+
+                const prog = springs.progress.update(dt);
+                const sy = springs.scaleY.update(dt);
+
+                fill.style.width = `${Math.max(0, Math.min(100, prog))}%`;
+                glass.style.transform = `scaleY(${sy})`;
+                document.getElementById("progressDisplacementMap").setAttribute("scale", config.maxDisp * sy);
+
+                if (!useBackdropFilter) {
+                    const areaRect = wrapper.getBoundingClientRect();
+                    cloneWorld.style.width = areaRect.width + "px";
+                    cloneWorld.style.height = areaRect.height + "px";
+                    const offsetLeft = (areaRect.width - config.width) / 2;
+                    const offsetTop = (areaRect.height - config.height) / 2;
+                    cloneWorld.style.transform = `scaleY(${1 / sy}) translate(${-offsetLeft}px, ${-offsetTop}px)`;
+                }
+
+                if (!Object.values(springs).every(sp => sp.isSettled())) animationFrameId = requestAnimationFrame(loop);
+                else animationFrameId = null;
+            }
+
+            wrapper.addEventListener('click', () => {
+                state.progress = Math.floor(Math.random() * 100);
+                springs.scaleY.velocity += 1.5; 
+                if (!animationFrameId) animationFrameId = requestAnimationFrame(loop);
+            });
+
+            animationFrameId = requestAnimationFrame(loop);
+        }
+
+        function initTooltipDemo() {
+            const config = { width: 140, height: 46, radius: 23, bezelWidth: 15, glassThickness: 60, refractiveIndex: 1.6, maxDisp: 0 };
+            const state = { isHovered: false };
+            const springs = { scale: new Spring(0.5, 400, 25), y: new Spring(20, 400, 25) };
+            
+            const trigger = document.getElementById('tooltipTrigger'), glass = document.getElementById('tooltipGlass'), cloneWorld = document.getElementById('tooltipCloneWorld'), demoArea = document.getElementById('tooltipDemoArea');
+            let animationFrameId = null;
+
+            const precomputed = calculateDisplacementMap1D(config.glassThickness, config.bezelWidth, SurfaceEquations.convex_squircle, config.refractiveIndex);
+            config.maxDisp = Math.max(...precomputed.map(Math.abs));
+
+            document.getElementById("tooltipDisplacementImage").setAttribute("href", imageDataToDataURL(calculateDisplacementMap2D(config.width, config.height, config.width, config.height, config.radius, config.bezelWidth, config.maxDisp || 1, precomputed)));
+            document.getElementById("tooltipSpecularImage").setAttribute("href", imageDataToDataURL(calculateSpecularHighlight(config.width, config.height, config.radius, config.bezelWidth)));
+
+            if (!useBackdropFilter) {
+                cloneWorld.innerHTML = document.getElementById('tooltipRealWorld').outerHTML;
+                document.getElementById('tooltipClone').style.filter = "url(#tooltipGlassFilter)";
+            }
+
+            function loop() {
+                const dt = Math.min(0.032, 1 / 60);
+                springs.scale.setTarget(state.isHovered ? 1.0 : 0.5);
+                springs.y.setTarget(state.isHovered ? 0 : 20);
+
+                const sc = springs.scale.update(dt), yPos = springs.y.update(dt);
+                
+                glass.style.transform = `translateY(${yPos}px) scale(${sc})`;
+                glass.style.opacity = Math.max(0, (sc - 0.5) * 2);
+                document.getElementById("tooltipDisplacementMap").setAttribute("scale", config.maxDisp * sc);
+
+                if (!useBackdropFilter) {
+                    const areaRect = demoArea.getBoundingClientRect();
+                    const glassRect = glass.getBoundingClientRect();
+                    cloneWorld.style.width = areaRect.width + "px";
+                    cloneWorld.style.height = areaRect.height + "px";
+                    
+                    const origTrans = glass.style.transform;
+                    glass.style.transform = 'none';
+                    const baseRect = glass.getBoundingClientRect();
+                    glass.style.transform = origTrans;
+
+                    const offsetLeft = baseRect.left - areaRect.left;
+                    const offsetTop = baseRect.top - areaRect.top;
+
+                    cloneWorld.style.transform = `scale(${1 / sc}) translate(${-offsetLeft}px, ${-offsetTop - yPos}px)`;
+                }
+
+                if (!Object.values(springs).every(sp => sp.isSettled())) animationFrameId = requestAnimationFrame(loop);
+                else animationFrameId = null;
+            }
+
+            trigger.addEventListener('mouseenter', () => { state.isHovered = true; if (!animationFrameId) animationFrameId = requestAnimationFrame(loop); });
+            trigger.addEventListener('mouseleave', () => { state.isHovered = false; if (!animationFrameId) animationFrameId = requestAnimationFrame(loop); });
+
+            animationFrameId = requestAnimationFrame(loop);
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             detectFeatures();
             initLensDemo();
@@ -2119,6 +2465,11 @@
             initVolDemo();
             initFabDemo();
             initStepperDemo();
+            
+            // Newly added components
+            initCheckboxDemo();
+            initProgressDemo();
+            initTooltipDemo();
         });
     </script>
 </body>
